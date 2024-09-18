@@ -1,5 +1,7 @@
 package soe.mdeis.m7.solid.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import soe.mdeis.m7.solid.model.GrupoProducto;
@@ -16,5 +18,9 @@ public class GrupoProductoService {
 
    public GrupoProducto save(GrupoProducto grupoProducto) {
       return this.grupoProductoRepository.save(grupoProducto);
+   }
+
+   public List<GrupoProducto> getAll() {
+      return this.grupoProductoRepository.findAll();
    }
 }
