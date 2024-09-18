@@ -1,5 +1,7 @@
 package soe.mdeis.m7.solid.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import soe.mdeis.m7.solid.model.Producto;
@@ -12,6 +14,10 @@ public class ProductoService {
 
    public ProductoService(ProductoRepository productoRepository) {
       this.productoRepository = productoRepository;
+   }
+
+   public List<Producto> getAll() {
+      return productoRepository.findAll();
    }
 
    public Producto save(Producto producto) {
