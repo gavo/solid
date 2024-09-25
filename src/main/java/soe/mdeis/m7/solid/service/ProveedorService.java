@@ -23,4 +23,9 @@ public class ProveedorService {
    public List<Proveedor> getAll() {
       return this.proveedorRepository.findAll();
    }
+
+   public Proveedor update(int id, Proveedor proveedor) {
+      Proveedor proveedorUpdated = new Proveedor(id, proveedor.getNombre());
+      return this.proveedorRepository.save(proveedorUpdated);
+   }
 }
