@@ -20,7 +20,13 @@ public class FabricanteService {
       return fabricanteRepository.save(fabricante);
    }
 
+   public Fabricante update(int id, Fabricante fabricante) {
+      Fabricante f = new Fabricante(id, fabricante.getNombre());
+      return fabricanteRepository.save(f);
+   }
+
    public List<Fabricante> getAll() {
       return fabricanteRepository.findAll();
    }
+
 }
