@@ -23,4 +23,9 @@ public class GrupoProductoService {
    public List<GrupoProducto> getAll() {
       return this.grupoProductoRepository.findAll();
    }
+
+   public GrupoProducto update(int id, GrupoProducto grupoProducto) {
+      GrupoProducto updated = new GrupoProducto(id, grupoProducto.getNombre());
+      return this.grupoProductoRepository.save(updated);
+   }
 }
