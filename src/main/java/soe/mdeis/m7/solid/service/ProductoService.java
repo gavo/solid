@@ -28,4 +28,20 @@ public class ProductoService {
       producto.setPrecioLista(price);
       return productoRepository.save(producto);
    }
+
+   public Producto update(int id, Producto producto) {
+      Producto newProducto = new Producto();
+      newProducto.setId(id);
+      newProducto.setNombre(producto.getNombre());
+      newProducto.setNombreExtranjero(producto.getNombreExtranjero());
+      newProducto.setCodBarra(producto.getCodBarra());
+      newProducto.setPrecioLista(producto.getPrecioLista());
+      newProducto.setPeso(producto.getPeso());
+      newProducto.setUm(producto.getUm());
+      newProducto.setAlternante(producto.getAlternante());
+      newProducto.setFabricante(producto.getFabricante());
+      newProducto.setProveedor(producto.getProveedor());
+      newProducto.setGrupoProducto(producto.getGrupoProducto());
+      return productoRepository.save(newProducto);
+   }
 }
