@@ -20,14 +20,10 @@ public class Almacen {
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-   @Column(name = "id_almacen")
-   Integer idAlmacen;
+   @Column(name = "id")
+   Integer id;
 
-   @Column(name = "nombre_almacen")
-   String nombreAlmacen;
-
-   String denominativo;
-
-   Boolean estado;
+   @Column(name = "nombre")
+   String nombre;
 
 }
