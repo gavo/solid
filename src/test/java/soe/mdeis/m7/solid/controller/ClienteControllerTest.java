@@ -38,7 +38,7 @@ public class ClienteControllerTest {
       @Test
       @DisplayName("Save new Cliente")
       void shouldSaveANewCliente() throws Exception {
-            Cliente newCliente = new Cliente(1, "Juan Perez", "123");
+            Cliente newCliente = new Cliente(1, "Juan Perez", "123", null);
 
             Mockito.when(clienteService.save(Mockito.any(Cliente.class)))
                         .thenReturn(newCliente);
@@ -55,8 +55,11 @@ public class ClienteControllerTest {
       @Test
       @DisplayName("Get Clientes")
       void showListAllCliente() throws Exception {
-            List<Cliente> clientes = new ArrayList<Cliente>(Arrays.asList(new Cliente(1, "Juan 1", "001"),
-                        new Cliente(2, "Juan 2", "002"), new Cliente(2, "Juan 3", "003")));
+            List<Cliente> clientes = new ArrayList<Cliente>(
+                        Arrays.asList(
+                                    new Cliente(1, "Juan 1", "001", null),
+                                    new Cliente(2, "Juan 2", "002", null),
+                                    new Cliente(2, "Juan 3", "003", null)));
 
             Mockito.when(clienteService.getAll()).thenReturn(clientes);
 
