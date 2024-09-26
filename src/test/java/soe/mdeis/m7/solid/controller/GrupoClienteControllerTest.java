@@ -28,40 +28,40 @@ import java.util.List;
 @AutoConfigureMockMvc
 @DisplayName("Test Cliente Controller")
 public class GrupoClienteControllerTest {
-   @Autowired
-   private MockMvc mockMvc;
+      @Autowired
+      private MockMvc mockMvc;
 
-   @MockBean
-   private GrupoClienteService grupoClienteService;
+      @MockBean
+      private GrupoClienteService grupoClienteService;
 
-   @Test
-   @DisplayName("Save new GrupoCliente")
-   void shouldSaveNewGrupoCliente() throws Exception {
-      GrupoCliente newGrupoCliente = new GrupoCliente(1, "GrupoC 1", 10, true);
+      @Test
+      @DisplayName("Save new GrupoCliente")
+      void shouldSaveNewGrupoCliente() throws Exception {
+            GrupoCliente newGrupoCliente = new GrupoCliente(1, "GrupoC 1", 10);
 
-      Mockito.when(grupoClienteService.save(Mockito.any(GrupoCliente.class))).thenReturn(newGrupoCliente);
+            Mockito.when(grupoClienteService.save(Mockito.any(GrupoCliente.class))).thenReturn(newGrupoCliente);
 
-      mockMvc.perform(post("/api/grupo-cliente")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"id\":\"1\",\"nombre\":\"GrupoC 1\", \"descuento\":\"10\", \"estado\":\"true\"}"))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.descuento", is(10)))
-            .andExpect(jsonPath("$.nombre", is("GrupoC 1")));
-   }
+            mockMvc.perform(post("/api/grupo-cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"id\":\"1\",\"nombre\":\"GrupoC 1\", \"descuento\":\"10\", \"estado\":\"true\"}"))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.descuento", is(10)))
+                        .andExpect(jsonPath("$.nombre", is("GrupoC 1")));
+      }
 
-   @Test
-   @DisplayName("Get Grupos Clientes")
-   void showListAllAlmacenes() throws Exception {
-      List<GrupoCliente> grupoClientes = new ArrayList<GrupoCliente>(Arrays.asList(
-            new GrupoCliente(1, "GrupoC 1", 15, true),
-            new GrupoCliente(2, "GrupoC 2", 15, true)));
+      @Test
+      @DisplayName("Get Grupos Clientes")
+      void showListAllAlmacenes() throws Exception {
+            List<GrupoCliente> grupoClientes = new ArrayList<GrupoCliente>(Arrays.asList(
+                        new GrupoCliente(1, "GrupoC 1", 15),
+                        new GrupoCliente(2, "GrupoC 2", 15)));
 
-      Mockito.when(grupoClienteService.getAll()).thenReturn(grupoClientes);
+            Mockito.when(grupoClienteService.getAll()).thenReturn(grupoClientes);
 
-      mockMvc.perform(get("/api/grupo-cliente")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(2)));
-   }
+            mockMvc.perform(get("/api/grupo-cliente")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$", hasSize(2)));
+      }
 }

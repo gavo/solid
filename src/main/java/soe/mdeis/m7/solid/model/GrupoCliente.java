@@ -26,5 +26,4 @@ public class GrupoCliente {
 
    Integer descuento;
 
-   Boolean estado;
 }
