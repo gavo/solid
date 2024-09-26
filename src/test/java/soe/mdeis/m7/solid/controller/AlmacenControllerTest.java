@@ -45,8 +45,8 @@ public class AlmacenControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombreAlmacen\":\"Almacen 1\",\"denominativo\":\"Alm-01\",\"estado\":\"true\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.idAlmacen", is(1)))
-                        .andExpect(jsonPath("$.nombreAlmacen", is("Almacen 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Almacen 1")));
       }
 
       @Test
