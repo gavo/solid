@@ -47,7 +47,7 @@ public class GrupoClienteControllerTest {
                         .content("{\"id\":\"1\",\"nombre\":\"GrupoC 1\", \"descuento\":\"10\", \"estado\":\"true\"}"))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.id", is(1)))
-                        .andExpect(jsonPath("$.descuento", is(10)))
+                        .andExpect(jsonPath("$.descuento", is(15)))
                         .andExpect(jsonPath("$.nombre", is("GrupoC 1")));
       }
 
