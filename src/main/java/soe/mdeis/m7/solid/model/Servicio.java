@@ -1,5 +1,7 @@
 package soe.mdeis.m7.solid.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,7 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity(name = "servicio")
+@Entity(name = "servicios")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,4 +25,7 @@ public class Servicio {
    String codigo;
 
    String nombre;
+
+   BigDecimal precio;
+
 }

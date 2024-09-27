@@ -1,5 +1,6 @@
 package soe.mdeis.m7.solid.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,8 +25,8 @@ public class ProductoService {
       return productoRepository.save(producto);
    }
 
-   public Producto savePrice(Producto producto, int price) {
-      producto.setPrecioLista(price);
+   public Producto savePrice(Producto producto, BigDecimal price) {
+      producto.setPrecio(price);
       return productoRepository.save(producto);
    }
 
@@ -35,7 +36,7 @@ public class ProductoService {
       newProducto.setNombre(producto.getNombre());
       newProducto.setNombreExtranjero(producto.getNombreExtranjero());
       newProducto.setCodBarra(producto.getCodBarra());
-      newProducto.setPrecioLista(producto.getPrecioLista());
+      newProducto.setPrecio(producto.getPrecio());
       newProducto.setPeso(producto.getPeso());
       newProducto.setUm(producto.getUm());
       newProducto.setAlternante(producto.getAlternante());

@@ -27,6 +27,6 @@ public class Cliente {
    String code;
 
    @ManyToOne
-   @JoinColumn(name = "id_gru_cli", nullable = true)
+   @JoinColumn(name = "id_grupo_clientes", nullable = true)
    GrupoCliente grupoCliente;
 }

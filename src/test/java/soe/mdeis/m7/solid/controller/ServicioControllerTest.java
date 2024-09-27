@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,40 +30,41 @@ import java.util.List;
 @DisplayName("Test Servicio Controller")
 public class ServicioControllerTest {
 
-   @Autowired
-   MockMvc mockMvc;
+      @Autowired
+      MockMvc mockMvc;
 
-   @MockBean
-   ServicioService service;
+      @MockBean
+      ServicioService service;
 
-   @Test
-   @DisplayName("Save new Servicio")
-   void shouldSaveANewServicio() throws Exception {
-      Servicio newServicio = new Servicio(1, "S-01", "Servicio 1");
+      @Test
+      @DisplayName("Save new Servicio")
+      void shouldSaveANewServicio() throws Exception {
+            Servicio newServicio = new Servicio(1, "S-01", "Servicio 1", BigDecimal.ONE);
 
-      Mockito.when(service.save(Mockito.any(Servicio.class))).thenReturn(newServicio);
+            Mockito.when(service.save(Mockito.any(Servicio.class))).thenReturn(newServicio);
 
-      mockMvc.perform(post("/api/servicio")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"codigo\":\"S-01\",\"nombre\":\"Servicio 1\"}"))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.id", is(1)))
-            .andExpect(jsonPath("$.nombre", is("Servicio 1")));
-   }
+            mockMvc.perform(post("/api/servicio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"codigo\":\"S-01\",\"nombre\":\"Servicio 1\",\"precio\":\"1\"}"))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Servicio 1")))
+                        .andExpect(jsonPath("$.precio", is(BigDecimal.ONE.intValue())));
+      }
 
-   @Test
-   @DisplayName("Get Servicios")
-   void showListAllAlmacenes() throws Exception {
-      List<Servicio> list = new ArrayList<Servicio>(Arrays.asList(
-            new Servicio(1, "ser-01", "Servicio 1"),
-            new Servicio(1, "ser-02", "Servicio 2"),
-            new Servicio(1, "ser-03", "Servicio 3")));
+      @Test
+      @DisplayName("Get Servicios")
+      void showListAllAlmacenes() throws Exception {
+            List<Servicio> list = new ArrayList<Servicio>(Arrays.asList(
+                        new Servicio(1, "ser-01", "Servicio 1", BigDecimal.ONE),
+                        new Servicio(1, "ser-02", "Servicio 2", BigDecimal.ONE),
+                        new Servicio(1, "ser-03", "Servicio 3", BigDecimal.ONE)));
 
-      Mockito.when(service.getAll()).thenReturn(list);
+            Mockito.when(service.getAll()).thenReturn(list);
 
-      mockMvc.perform(get("/api/servicio")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$", hasSize(3)));
-   }
+            mockMvc.perform(get("/api/servicio")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$", hasSize(3)));
+      }
 }

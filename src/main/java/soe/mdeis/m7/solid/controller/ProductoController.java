@@ -6,6 +6,8 @@ import io.micrometer.common.util.StringUtils;
 import soe.mdeis.m7.solid.model.Producto;
 import soe.mdeis.m7.solid.service.ProductoService;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,7 @@ public class ProductoController {
       if (StringUtils.isBlank(newProducto.getCodBarra())) {
          return ResponseEntity.badRequest().body("Debe asignar un Codigo de barra");
       }
-      if (newProducto.getPrecioLista() <= 0) {
+      if (newProducto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
          return ResponseEntity.badRequest().body("Debe asignar precio");
       }
       if (newProducto.getPeso() <= 0) {
@@ -69,7 +71,7 @@ public class ProductoController {
       if (StringUtils.isBlank(producto.getCodBarra())) {
          return ResponseEntity.badRequest().body("Debe asignar un Codigo de barra");
       }
-      if (producto.getPrecioLista() <= 0) {
+      if (producto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
          return ResponseEntity.badRequest().body("Debe asignar precio");
       }
       if (producto.getPeso() <= 0) {

@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,7 @@ public class GrupoClienteControllerTest {
       @Test
       @DisplayName("Save new GrupoCliente")
       void shouldSaveNewGrupoCliente() throws Exception {
-            GrupoCliente newGrupoCliente = new GrupoCliente(1, "GrupoC 1", 10);
+            GrupoCliente newGrupoCliente = new GrupoCliente(1, "GrupoC 1", BigDecimal.valueOf(15));
 
             Mockito.when(grupoClienteService.save(Mockito.any(GrupoCliente.class))).thenReturn(newGrupoCliente);
 
@@ -54,8 +55,8 @@ public class GrupoClienteControllerTest {
       @DisplayName("Get Grupos Clientes")
       void showListAllAlmacenes() throws Exception {
             List<GrupoCliente> grupoClientes = new ArrayList<GrupoCliente>(Arrays.asList(
-                        new GrupoCliente(1, "GrupoC 1", 15),
-                        new GrupoCliente(2, "GrupoC 2", 15)));
+                        new GrupoCliente(1, "GrupoC 1", BigDecimal.valueOf(10)),
+                        new GrupoCliente(2, "GrupoC 2", BigDecimal.valueOf(15))));
 
             Mockito.when(grupoClienteService.getAll()).thenReturn(grupoClientes);
 

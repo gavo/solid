@@ -1,7 +1,12 @@
 package soe.mdeis.m7.solid.model;
 
+import java.math.BigDecimal;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,22 +39,22 @@ public class Producto {
    String codBarra;
 
    String um;
-   @Column(name = "precio_lista")
-   int precioLista;
+
+   BigDecimal precio;
 
    @ManyToOne
-   @JoinColumn(name = "id_gru_pro")
+   @JoinColumn(name = "id_grupo_producto")
    GrupoProducto grupoProducto;
 
-   @ManyToOne
-   @JoinColumn(name = "id_prov")
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "id_proveedor")
    Proveedor proveedor;
 
-   @ManyToOne
-   @JoinColumn(name = "id_fab")
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "id_fabricante")
    Fabricante fabricante;
 
-   @ManyToOne
-   @JoinColumn(name = "id_alt")
+   @JsonIgnore
+   @ManyToOne(fetch = FetchType.LAZY)
    Producto alternante;
 }

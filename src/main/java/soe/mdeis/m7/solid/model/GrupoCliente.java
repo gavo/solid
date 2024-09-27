@@ -1,6 +1,7 @@
 package soe.mdeis.m7.solid.model;
 
-import jakarta.persistence.Column;
+import java.math.BigDecimal;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,14 +17,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class GrupoCliente {
+
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
    Integer id;
 
-   @Column(name = "nombre")
    String nombre;
 
-   Integer descuento;
+   BigDecimal descuento = BigDecimal.ZERO;
 
 }
