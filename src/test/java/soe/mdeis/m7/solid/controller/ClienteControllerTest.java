@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import soe.mdeis.m7.solid.model.Cliente;
+import soe.mdeis.m7.solid.model.TipoDocumento;
 import soe.mdeis.m7.solid.service.ClienteService;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -38,7 +39,7 @@ public class ClienteControllerTest {
       @Test
       @DisplayName("Save new Cliente")
       void shouldSaveANewCliente() throws Exception {
-            Cliente newCliente = new Cliente(1, "Juan Perez", "123", null);
+            Cliente newCliente = new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com", null);
 
             Mockito.when(clienteService.save(Mockito.any(Cliente.class)))
                         .thenReturn(newCliente);
@@ -57,9 +58,9 @@ public class ClienteControllerTest {
       void showListAllCliente() throws Exception {
             List<Cliente> clientes = new ArrayList<Cliente>(
                         Arrays.asList(
-                                    new Cliente(1, "Juan 1", "001", null),
-                                    new Cliente(2, "Juan 2", "002", null),
-                                    new Cliente(2, "Juan 3", "003", null)));
+                                    new Cliente(1, "Juan 1", "001", "112235", TipoDocumento.CI, "juan@email.com", null),
+                                    new Cliente(2, "Juan 2", "002", "223321", TipoDocumento.NIT, "j2@email.com", null),
+                                    new Cliente(3, "Juan3", "003", "11234", TipoDocumento.NIT, "j3@email.com", null)));
 
             Mockito.when(clienteService.getAll()).thenReturn(clientes);
 

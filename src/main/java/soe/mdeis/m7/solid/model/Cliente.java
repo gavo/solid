@@ -1,6 +1,9 @@
 package soe.mdeis.m7.solid.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +28,14 @@ public class Cliente {
    String nombre;
 
    String code;
+
+   String documento;
+
+   @Enumerated(EnumType.STRING)
+   @Column(name = "tipo_documento")
+   TipoDocumento tipoDocumento;
+
+   String email;
 
    @ManyToOne
    @JoinColumn(name = "id_grupo_clientes", nullable = true)

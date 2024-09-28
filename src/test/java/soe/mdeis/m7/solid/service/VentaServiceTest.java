@@ -26,6 +26,7 @@ import soe.mdeis.m7.solid.model.Producto;
 import soe.mdeis.m7.solid.model.ProductoVendido;
 import soe.mdeis.m7.solid.model.Servicio;
 import soe.mdeis.m7.solid.model.ServicioRealizado;
+import soe.mdeis.m7.solid.model.TipoDocumento;
 import soe.mdeis.m7.solid.model.Venta;
 import soe.mdeis.m7.solid.repository.VentaRepository;
 
@@ -47,7 +48,8 @@ public class VentaServiceTest {
       void shouldCalculateTotalForVenta() {
             Venta venta = new Venta();
             GrupoCliente grupoCliente = new GrupoCliente(1, "Grupo Premium", BigDecimal.valueOf(20));
-            Cliente cliente = new Cliente(1, "Juan Perez", "001", grupoCliente);
+            Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
+                        grupoCliente);
             Producto p1 = new Producto(
                         1,
                         "Galleta",
