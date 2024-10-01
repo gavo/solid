@@ -11,13 +11,13 @@ import soe.mdeis.m7.solid.repository.ServicioRepository;
 @Service
 public class ServicioService {
    @Autowired
-   ServicioRepository repo;
+   ServicioRepository repository;
 
    public Servicio save(Servicio servicio) {
-      return repo.save(servicio);
+      return repository.save(servicio);
    }
 
    public List<Servicio> getAll() {
-      return repo.findAll();
+      return repository.findAll();
    }
 }

@@ -21,14 +21,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @WebMvcTest(ServicioController.class)
 @AutoConfigureMockMvc
 @DisplayName("Test Servicio Controller")
-public class ServicioControllerTest {
+class ServicioControllerTest {
 
       @Autowired
       MockMvc mockMvc;
@@ -37,34 +35,49 @@ public class ServicioControllerTest {
       ServicioService service;
 
       @Test
-      @DisplayName("Save new Servicio")
-      void shouldSaveANewServicio() throws Exception {
-            Servicio newServicio = new Servicio(1, "S-01", "Servicio 1", BigDecimal.ONE);
-
-            Mockito.when(service.save(Mockito.any(Servicio.class))).thenReturn(newServicio);
+      @DisplayName("Servicio Controller Register Servicio")
+      void servicioControllerRegisterServicio() throws Exception {
+            Mockito.when(service.save(Mockito.any(Servicio.class)))
+                        .thenReturn(new Servicio(1, "S-01", "Servicio 1", BigDecimal.ONE));
 
             mockMvc.perform(post("/api/servicio")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"codigo\":\"S-01\",\"nombre\":\"Servicio 1\",\"precio\":\"1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.id", is(1)))
-                        .andExpect(jsonPath("$.nombre", is("Servicio 1")))
-                        .andExpect(jsonPath("$.precio", is(BigDecimal.ONE.intValue())));
+                        .andExpect(jsonPath("$.data.id", is(1)))
+                        .andExpect(jsonPath("$.data.nombre", is("Servicio 1")))
+                        .andExpect(jsonPath("$.data.precio", is(BigDecimal.ONE.intValue())));
       }
 
       @Test
-      @DisplayName("Get Servicios")
+      @DisplayName("Servicio Controller Register Servicio Without Nombre")
+      void servicioControllerRegisterServicioWithoutNombre() throws Exception {
+            mockMvc.perform(post("/api/servicio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"codigo\":\"S-01\",\"nombre\":\"\",\"precio\":\"1\"}"))
+                        .andExpect(status().isBadRequest());
+      }
+
+      @Test
+      @DisplayName("Servicio Controller Register Servicio Without Codigo")
+      void servicioControllerRegisterServicioWithoutCodigo() throws Exception {
+            mockMvc.perform(post("/api/servicio")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"codigo\":\"\",\"nombre\":\"Servicio 1\",\"precio\":\"1\"}"))
+                        .andExpect(status().isBadRequest());
+      }
+
+      @Test
+      @DisplayName("Servicio Controller Get All Servicios")
       void showListAllAlmacenes() throws Exception {
-            List<Servicio> list = new ArrayList<Servicio>(Arrays.asList(
-                        new Servicio(1, "ser-01", "Servicio 1", BigDecimal.ONE),
-                        new Servicio(1, "ser-02", "Servicio 2", BigDecimal.ONE),
-                        new Servicio(1, "ser-03", "Servicio 3", BigDecimal.ONE)));
-
-            Mockito.when(service.getAll()).thenReturn(list);
-
+            Mockito.when(service.getAll())
+                        .thenReturn(Arrays.asList(
+                                    new Servicio(1, "ser-01", "Servicio 1", BigDecimal.ONE),
+                                    new Servicio(1, "ser-02", "Servicio 2", BigDecimal.ONE),
+                                    new Servicio(1, "ser-03", "Servicio 3", BigDecimal.ONE)));
             mockMvc.perform(get("/api/servicio")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$", hasSize(3)));
+                        .andExpect(jsonPath("$.data", hasSize(3)));
       }
 }
