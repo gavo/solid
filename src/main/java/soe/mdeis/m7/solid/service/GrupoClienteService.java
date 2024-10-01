@@ -12,13 +12,18 @@ import soe.mdeis.m7.solid.repository.GrupoClienteRepository;
 public class GrupoClienteService {
 
    @Autowired
-   GrupoClienteRepository grupoClienteRepository;
+   GrupoClienteRepository repository;
 
    public GrupoCliente save(GrupoCliente grupoCliente) {
-      return grupoClienteRepository.save(grupoCliente);
+      return repository.save(grupoCliente);
    }
 
    public List<GrupoCliente> getAll() {
-      return grupoClienteRepository.findAll();
+      return repository.findAll();
+   }
+
+   public GrupoCliente update(int id, GrupoCliente grupoCliente) {
+      GrupoCliente grupo = new GrupoCliente(id, grupoCliente.getNombre(), grupoCliente.getDescuento());
+      return repository.save(grupo);
    }
 }
