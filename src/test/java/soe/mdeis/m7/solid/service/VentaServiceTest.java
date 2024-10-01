@@ -1,6 +1,7 @@
 package soe.mdeis.m7.solid.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import soe.mdeis.m7.solid.model.Cliente;
@@ -40,8 +42,8 @@ class VentaServiceTest {
       private VentaService service;
 
       @Test
-      @DisplayName("Venta Service Save Venta")
-      void shouldCalculateTotalForVenta() {
+      @DisplayName("Venta Service Save Venta all discounts without Services")
+      void ventaServiceSaveVentaAllDiscountsWithoutServices() {
             GrupoCliente grupoCliente = new GrupoCliente(1, "Grupo Premium", BigDecimal.valueOf(20));
             Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         grupoCliente);
@@ -62,7 +64,6 @@ class VentaServiceTest {
             venta.setProductos(productosVendidos);
             venta.setCliente(cliente);
             venta.setFactura(new Factura(1, "null", null, "12345", "Juan Perez", null, null, venta));
-
             when(repository.save(any(Venta.class))).thenReturn(venta);
 
             Venta result = service.save(venta);
@@ -78,7 +79,8 @@ class VentaServiceTest {
       }
 
       @Test
-      void shouldCalculateTotalForVentaWithoutGrupoCliente() {
+      @DisplayName("Venta Service Save Venta OF Services with Discount but GrupoCLiente")
+      void ventaServiceSaveVentaOfServicesWithDiscountButGrupoCliente() {
             Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         null);
 
@@ -109,7 +111,8 @@ class VentaServiceTest {
       }
 
       @Test
-      void shouldCalculateTotalForVentaWithoutClienteAndFactura() {
+      @DisplayName("Venta Service save Venta without clientes and factura")
+      void vetaServiceVentaWithoutClientesAndFactura() {
             Venta venta = new Venta();
             Producto p1 = new Producto(
                         1, "Chocolate", "chocolate", 1, "1121",
@@ -143,6 +146,18 @@ class VentaServiceTest {
             assertEquals(BigDecimal.valueOf(20), result.getDescuento());
             assertEquals(BigDecimal.valueOf(50), result.getTotal());
             assertNull(result.getFactura());
+      }
+
+      @Test
+      @DisplayName("Venta Service Get All Ventas")
+      void ventaServiceGetAllVentas() {
+            Mockito.when(repository.findAll()).thenReturn(Arrays.asList(
+                        new Venta(),
+                        new Venta(),
+                        new Venta()));
+            var ventas = service.getAllVentas();
+            assertFalse(ventas.isEmpty());
+            assertEquals(3, ventas.size());
       }
 
 }

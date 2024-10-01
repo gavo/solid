@@ -47,7 +47,6 @@ public class VentaService {
                               .multiply(descuentoCliente)
                               .divide(BigDecimal.valueOf(100), 1, RoundingMode.HALF_UP)
                               .add(subTotalDescuento);
-
                   venta.setDescuento(descuento);
             } else {
                   venta.setDescuento(subTotalDescuento);
@@ -59,16 +58,14 @@ public class VentaService {
                   venta.getFactura().setTotal(venta.getTotal());
                   venta.getFactura().setFecha(LocalDateTime.now());
                   venta.getFactura().setCreditoFiscal(
-                              venta.getTotal()
-                                          .multiply(BigDecimal.valueOf(0.15)).setScale(1, RoundingMode.HALF_UP));
+                              venta.getTotal().multiply(BigDecimal.valueOf(0.15)).setScale(1, RoundingMode.HALF_UP));
             }
 
             return repository.save(venta);
       }
 
       public List<Venta> getAllVentas() {
-            var ventas = repository.findAll();
-            return ventas;
+            return repository.findAll();
       }
 
 }
