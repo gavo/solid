@@ -1,6 +1,7 @@
 package soe.mdeis.m7.solid.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,14 +13,27 @@ import soe.mdeis.m7.solid.repository.AlmacenRepository;
 public class AlmacenService {
 
    @Autowired
-   AlmacenRepository almacenRepository;
+   AlmacenRepository repository;
+
+   public Almacen update(int id, Almacen almacen) {
+      Almacen newAlmacen = new Almacen(id, almacen.getNombre());
+      return repository.save(newAlmacen);
+   }
 
    public Almacen save(Almacen almacen) {
-      return almacenRepository.save(almacen);
+      return repository.save(almacen);
    }
 
    public List<Almacen> getAll() {
-      return almacenRepository.findAll();
+      return repository.findAll();
+   }
+
+   public Optional<Almacen> get(int id) {
+      return repository.findById(id);
+   }
+
+   public void delete(int id) {
+      repository.deleteById(id);
    }
 
 }
