@@ -1,15 +1,16 @@
 package soe.mdeis.m7.solid.controller;
 
+import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
+import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.Producto;
 import soe.mdeis.m7.solid.service.ProductoService;
 
 import java.math.BigDecimal;
+import java.net.URI;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,62 +25,56 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("api")
 @CrossOrigin(value = "http://localhost:3000")
 public class ProductoController {
-   private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);
 
    @Autowired
-   private ProductoService productoService;
+   private ProductoService service;
 
    @GetMapping("/producto")
-   public ResponseEntity<?> getMethodName() {
-      var productos = productoService.getAll();
-      productos.forEach(producto -> logger.info(producto.getNombre()));
-      return ResponseEntity.ok().body(productos);
+   public ResponseEntity<ApiResponse<List<Producto>>> getProductos() {
+      var productos = service.getAll();
+      return ResponseEntity.ok()
+            .body(ApiResponse.of(productos, String.format("[%d] Productos", productos.size())));
    }
 
    @PostMapping("/producto")
-   public ResponseEntity<?> postMethodName(@RequestBody Producto newProducto) {
-      if (StringUtils.isBlank(newProducto.getNombre())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Nombre");
-      }
-      if (StringUtils.isBlank(newProducto.getNombreExtranjero())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Nombre extranjero");
-      }
-      if (StringUtils.isBlank(newProducto.getCodBarra())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Codigo de barra");
-      }
-      if (newProducto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
-         return ResponseEntity.badRequest().body("Debe asignar precio");
-      }
-      if (newProducto.getPeso() <= 0) {
-         return ResponseEntity.badRequest().body("Debe asignar Peso");
-      }
-      if (StringUtils.isBlank(newProducto.getUm())) {
-         return ResponseEntity.badRequest().body("Debe asignar Unidad de Medida");
-      }
-      logger.info("Producto a Guardar: " + newProducto.getNombre());
-      return ResponseEntity.ok().body(productoService.save(newProducto));
+   public ResponseEntity<ApiResponse<Producto>> registerProducto(@RequestBody Producto producto) {
+      ResponseEntity<ApiResponse<Producto>> verify = verifyProduct(producto);
+      if (verify != null)
+         return verify;
+      Producto newProducto = service.save(producto);
+      return ResponseEntity.created(URI.create("/producto/" + newProducto.getId()))
+            .body(ApiResponse.of(newProducto, "Producto Registrado"));
    }
 
    @PutMapping("/producto/{id}")
-   public ResponseEntity<?> putMethodName(@PathVariable int id, @RequestBody Producto producto) {
+   public ResponseEntity<ApiResponse<Producto>> updateProducto(@PathVariable int id, @RequestBody Producto producto) {
+      ResponseEntity<ApiResponse<Producto>> verify = verifyProduct(producto);
+      if (verify != null)
+         return verify;
+      var productoUpdated = service.update(id, producto);
+      return ResponseEntity.ok().body(ApiResponse.of(productoUpdated, "Producto actualizado"));
+   }
+
+   private ResponseEntity<ApiResponse<Producto>> verifyProduct(Producto producto) {
       if (StringUtils.isBlank(producto.getNombre())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Nombre");
+         return ResponseEntity.badRequest().body(ApiResponse.of(producto, "Falta el campo [nombre]"));
       }
       if (StringUtils.isBlank(producto.getNombreExtranjero())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Nombre extranjero");
+         return ResponseEntity.badRequest().body(ApiResponse.of(producto, "Falta el campo [nombreExtranjero]"));
       }
       if (StringUtils.isBlank(producto.getCodBarra())) {
-         return ResponseEntity.badRequest().body("Debe asignar un Codigo de barra");
+         return ResponseEntity.badRequest().body(ApiResponse.of(producto, "Falta el campo [codBarra]"));
       }
-      if (producto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
-         return ResponseEntity.badRequest().body("Debe asignar precio");
+      if (producto.getPrecio() == null || producto.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
+         return ResponseEntity.badRequest().body(ApiResponse.of(producto, "Falta el campo [precio]"));
       }
       if (producto.getPeso() <= 0) {
-         return ResponseEntity.badRequest().body("Debe asignar Peso");
+         return ResponseEntity.badRequest().body(ApiResponse.of(producto, "Falta el campo [peso]"));
       }
       if (StringUtils.isBlank(producto.getUm())) {
-         return ResponseEntity.badRequest().body("Debe asignar Unidad de Medida");
+         return ResponseEntity.badRequest().body(
+               ApiResponse.of(producto, "Falta el campo [um]"));
       }
-      return ResponseEntity.ok().body(productoService.update(id, producto));
+      return null;
    }
 }

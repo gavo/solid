@@ -40,7 +40,7 @@ public class Producto {
 
    String um;
 
-   BigDecimal precio;
+   BigDecimal precio = BigDecimal.ZERO;
 
    @ManyToOne
    @JoinColumn(name = "id_grupo_producto")
