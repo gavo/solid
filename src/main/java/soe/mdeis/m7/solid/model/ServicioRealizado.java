@@ -29,9 +29,13 @@ public class ServicioRealizado {
 
    BigDecimal descuento = BigDecimal.ZERO;
 
+   String observaciones;
+
    @ManyToOne(fetch = FetchType.LAZY)
    @JoinColumn(name = "id_venta")
    Venta venta;
 
-   String observaciones;
+   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @JoinColumn(name = "id_servicio", nullable = false)
+   Servicio servicio;
 }
