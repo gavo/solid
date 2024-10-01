@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -21,52 +22,133 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Optional;
 
 @WebMvcTest(ClienteController.class)
 @AutoConfigureMockMvc
 @DisplayName("Test Cliente Controller")
-public class ClienteControllerTest {
+class ClienteControllerTest {
 
       @Autowired
       private MockMvc mockMvc;
 
       @MockBean
-      private ClienteService clienteService;
+      private ClienteService service;
 
       @Test
-      @DisplayName("Save new Cliente")
-      void shouldSaveANewCliente() throws Exception {
-            Cliente newCliente = new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com", null);
+      @DisplayName("Cliente Controller Register Cliente")
+      void clienteControllerRegisterCliente() throws Exception {
 
-            Mockito.when(clienteService.save(Mockito.any(Cliente.class)))
-                        .thenReturn(newCliente);
+            Mockito.when(service.save(Mockito.any(Cliente.class)))
+                        .thenReturn(new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
+                                    null));
 
-            mockMvc.perform(post("/api/clientes")
+            mockMvc.perform(post("/api/cliente")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nombre\":\"Juan Perez\",\"code\":\"123\"}"))
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.id", is(1)))
-                        .andExpect(jsonPath("$.code", is("123")))
-                        .andExpect(jsonPath("$.nombre", is("Juan Perez")));
+                        .andExpect(jsonPath("$.data.id", is(1)))
+                        .andExpect(jsonPath("$.data.code", is("123")))
+                        .andExpect(jsonPath("$.data.nombre", is("Juan Perez")))
+                        .andExpect(jsonPath("$.data.documento", is("1234123")))
+                        .andExpect(jsonPath("$.data.tipoDocumento", is("CI")))
+                        .andExpect(jsonPath("$.data.email", is("jp@email.com")));
       }
 
       @Test
-      @DisplayName("Get Clientes")
-      void showListAllCliente() throws Exception {
-            List<Cliente> clientes = new ArrayList<Cliente>(
-                        Arrays.asList(
-                                    new Cliente(1, "Juan 1", "001", "112235", TipoDocumento.CI, "juan@email.com", null),
-                                    new Cliente(2, "Juan 2", "002", "223321", TipoDocumento.NIT, "j2@email.com", null),
-                                    new Cliente(3, "Juan3", "003", "11234", TipoDocumento.NIT, "j3@email.com", null)));
+      @DisplayName("Cliente Controller Register Cliente without nombre")
+      void clienteControllerRegisterClienteWithoutNombre() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Falta el campo [nombre]")));
+      }
 
-            Mockito.when(clienteService.getAll()).thenReturn(clientes);
+      @Test
+      @DisplayName("Cliente Controller Register Cliente without code")
+      void clienteControllerRegisterClienteWithoutCode() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Falta el campo [code]")));
+      }
 
-            mockMvc.perform(get("/api/clientes")
+      @Test
+      @DisplayName("Cliente Controller Register Cliente Without documento")
+      void clienteControllerRegisterClienteWithoutDocumento() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Falta el campo [documento]")));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Register Cliente without Tipo Documento")
+      void clienteControllerRegisterClienteWithoutTipoDocumento() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":null,\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Falta el campo [tipoDocumento(NIT|CI)]")));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Register Cliente Bad Tipo Documento")
+      void clienteControllerRegisterClienteBadTipoDocumento() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"\",\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isBadRequest());
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Register Cliente without Email")
+      void clienteControllerRegisterClienteWithoutEmail() throws Exception {
+            mockMvc.perform(post("/api/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Falta el campo [email]")));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Get All Clientes")
+      void clienteControllerGetAllClientes() throws Exception {
+            var clientes = Arrays.asList(
+                        new Cliente(1, "Juan 1", "001", "112235", TipoDocumento.CI, "juan@email.com", null),
+                        new Cliente(2, "Juan 2", "002", "223321", TipoDocumento.NIT, "j2@email.com", null),
+                        new Cliente(3, "Juan3", "003", "11234", TipoDocumento.NIT, "j3@email.com", null));
+
+            Mockito.when(service.getAll()).thenReturn(clientes);
+
+            mockMvc.perform(get("/api/cliente")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$", hasSize(3)));
+                        .andExpect(jsonPath("$.data", hasSize(3)));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Get Cliente By ID")
+      void clienteControllerGetClienteById() throws Exception {
+            Mockito.when(service.get(1)).thenReturn(Optional.of(
+                        new Cliente(1, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
+            mockMvc.perform(get("/api/cliente/1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.data.id", is(1)));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Get Cliente By Id NotFound")
+      void clienteControllerGetClienteByIdNotFound() throws Exception {
+            Mockito.when(service.get(1)).thenReturn(Optional.of(
+                        new Cliente(1, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
+            mockMvc.perform(get("/api/cliente/2")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
       }
 }
