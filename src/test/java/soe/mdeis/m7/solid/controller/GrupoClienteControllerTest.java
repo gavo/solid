@@ -44,9 +44,9 @@ class GrupoClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":\"1\",\"nombre\":\"GrupoC 1\", \"descuento\":\"10\", \"estado\":\"true\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.descuento", is(15)))
-                        .andExpect(jsonPath("$.data.nombre", is("GrupoC 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.descuento", is(15)))
+                        .andExpect(jsonPath("$.nombre", is("GrupoC 1")));
       }
 
       @Test
@@ -67,7 +67,7 @@ class GrupoClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":\"1\",\"nombre\":\"Grupo 1\",\"descuento\":\"10\"}"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)));
+                        .andExpect(jsonPath("$.id", is(1)));
       }
 
       @Test
@@ -89,6 +89,6 @@ class GrupoClienteControllerTest {
             mockMvc.perform(get("/api/grupo-cliente")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(2)));
+                        .andExpect(jsonPath("$", hasSize(2)));
       }
 }

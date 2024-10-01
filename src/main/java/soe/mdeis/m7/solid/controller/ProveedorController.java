@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.Proveedor;
 import soe.mdeis.m7.solid.service.ProveedorService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,30 +26,29 @@ public class ProveedorController {
    private ProveedorService service;
 
    @GetMapping("/proveedor")
-   public ResponseEntity<ApiResponse<List<Proveedor>>> getProveedores() {
+   public ResponseEntity<List<Proveedor>> getProveedores() {
       var proveedores = service.getAll();
       return ResponseEntity.ok()
-            .body(ApiResponse.of(proveedores, String.format("[%d] Proveedores", proveedores.size())));
+            .body(proveedores);
    }
 
    @PostMapping("/proveedor")
-   public ResponseEntity<ApiResponse<Proveedor>> registerProveedor(@RequestBody Proveedor proveedor) {
+   public ResponseEntity<Proveedor> registerProveedor(@RequestBody Proveedor proveedor) {
       if (StringUtils.isBlank(proveedor.getNombre())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(proveedor, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(proveedor);
       }
       var newProveedor = service.save(proveedor);
-      return ResponseEntity.created(URI.create("/proveedor/" + newProveedor.getId()))
-            .body(ApiResponse.of(newProveedor, "Proveedor registrado"));
+      return ResponseEntity.created(URI.create("/proveedor/" + newProveedor.getId())).body(newProveedor);
    }
 
    @PutMapping("/proveedor/{id}")
-   public ResponseEntity<ApiResponse<Proveedor>> updateProveedor(@PathVariable int id,
+   public ResponseEntity<Proveedor> updateProveedor(@PathVariable int id,
          @RequestBody Proveedor proveedor) {
       if (StringUtils.isBlank(proveedor.getNombre())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(proveedor, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(proveedor);
       }
       var proveedorUpdated = service.update(id, proveedor);
-      return ResponseEntity.ok().body(ApiResponse.of(proveedorUpdated, "Proveedor Actualizado"));
+      return ResponseEntity.ok().body(proveedorUpdated);
    }
 
 }

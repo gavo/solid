@@ -10,7 +10,6 @@ import io.micrometer.common.util.StringUtils;
 import java.net.URI;
 import java.util.List;
 
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.GrupoCliente;
 import soe.mdeis.m7.solid.service.GrupoClienteService;
 
@@ -30,31 +29,27 @@ public class GrupoClienteController {
    GrupoClienteService service;
 
    @PostMapping("/grupo-cliente")
-   public ResponseEntity<ApiResponse<GrupoCliente>> registerGrupoCliente(@RequestBody GrupoCliente grupo) {
+   public ResponseEntity<GrupoCliente> registerGrupoCliente(@RequestBody GrupoCliente grupo) {
       if (StringUtils.isBlank(grupo.getNombre())) {
-         return ResponseEntity.badRequest().body(
-               ApiResponse.of(grupo, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(grupo);
       }
       GrupoCliente newGrupo = service.save(grupo);
-      return ResponseEntity.created(URI.create("/grupo-cliente/" + grupo.getId())).body(
-            ApiResponse.of(newGrupo, "GrupoCliente Registrado"));
+      return ResponseEntity.created(URI.create("/grupo-cliente/" + grupo.getId())).body(newGrupo);
    }
 
    @PutMapping("/grupo-cliente/{id}")
-   public ResponseEntity<ApiResponse<GrupoCliente>> updateGrupoCliente(@PathVariable int id,
+   public ResponseEntity<GrupoCliente> updateGrupoCliente(@PathVariable int id,
          @RequestBody GrupoCliente grupo) {
       if (StringUtils.isBlank(grupo.getNombre())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(grupo, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(grupo);
       }
       GrupoCliente newGrupo = service.update(id, grupo);
-      return ResponseEntity.ok().body(
-            ApiResponse.of(newGrupo, "GrupoCliente Actualizado"));
+      return ResponseEntity.ok().body(newGrupo);
    }
 
    @GetMapping("/grupo-cliente")
-   public ResponseEntity<ApiResponse<List<GrupoCliente>>> getGruposClientes() {
-      var list = service.getAll();
-      return ResponseEntity.ok().body(ApiResponse.of(list, String.format("%d GrupoClientes", list.size())));
+   public ResponseEntity<List<GrupoCliente>> getGruposClientes() {
+      return ResponseEntity.ok().body(service.getAll());
    }
 
 }

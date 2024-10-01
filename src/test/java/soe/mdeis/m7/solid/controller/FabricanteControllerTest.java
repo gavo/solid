@@ -42,8 +42,8 @@ class FabricanteControllerTest {
             mockMvc.perform(post("/api/fabricante").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Fabricante 1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Fabricante 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Fabricante 1")));
       }
 
       @Test
@@ -62,8 +62,8 @@ class FabricanteControllerTest {
             mockMvc.perform(put("/api/fabricante/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Fabricante 1\"}"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Fabricante 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Fabricante 1")));
       }
 
       @Test
@@ -82,6 +82,6 @@ class FabricanteControllerTest {
                         new Fabricante(3, "Fabricante 3")));
             mockMvc.perform(get("/api/fabricante").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(3)));
+                        .andExpect(jsonPath("$", hasSize(3)));
       }
 }

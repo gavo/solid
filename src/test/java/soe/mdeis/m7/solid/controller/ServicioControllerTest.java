@@ -44,9 +44,9 @@ class ServicioControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"codigo\":\"S-01\",\"nombre\":\"Servicio 1\",\"precio\":\"1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Servicio 1")))
-                        .andExpect(jsonPath("$.data.precio", is(BigDecimal.ONE.intValue())));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Servicio 1")))
+                        .andExpect(jsonPath("$.precio", is(BigDecimal.ONE.intValue())));
       }
 
       @Test
@@ -78,6 +78,6 @@ class ServicioControllerTest {
             mockMvc.perform(get("/api/servicio")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(3)));
+                        .andExpect(jsonPath("$", hasSize(3)));
       }
 }

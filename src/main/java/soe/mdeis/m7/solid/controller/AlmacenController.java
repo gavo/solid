@@ -12,7 +12,6 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.Almacen;
 import soe.mdeis.m7.solid.service.AlmacenService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,40 +31,37 @@ public class AlmacenController {
    AlmacenService service;
 
    @PostMapping("/almacen")
-   public ResponseEntity<ApiResponse<Almacen>> registerAlmacen(@RequestBody Almacen almacen) {
+   public ResponseEntity<Almacen> registerAlmacen(@RequestBody Almacen almacen) {
       if (StringUtils.isBlank(almacen.getNombre())) {
          return ResponseEntity.badRequest()
-               .body(ApiResponse.of(almacen, "falta el campo [nombre]"));
+               .body(almacen);
       }
       Almacen newAlmacen = service.save(almacen);
-      return ResponseEntity.created(URI.create("/almacen/" + newAlmacen.getId())).body(
-            ApiResponse.of(newAlmacen, "Almacen Registrado"));
+      return ResponseEntity.created(URI.create("/almacen/" + newAlmacen.getId())).body(newAlmacen);
    }
 
    @PutMapping("/almacen/{id}")
-   public ResponseEntity<ApiResponse<Almacen>> updateAlmacen(@PathVariable int id, @RequestBody Almacen almacen) {
+   public ResponseEntity<Almacen> updateAlmacen(@PathVariable int id, @RequestBody Almacen almacen) {
       if (StringUtils.isBlank(almacen.getNombre())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(almacen, "falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(almacen);
       }
 
       Almacen newAlmacen = service.update(id, almacen);
-      return ResponseEntity.ok().body(
-            ApiResponse.of(newAlmacen, "Almacen Actualizado"));
+      return ResponseEntity.ok().body(newAlmacen);
    }
 
    @GetMapping("/almacen")
-   public ResponseEntity<ApiResponse<List<Almacen>>> getAllAlmacenes() {
-      var list = service.getAll();
-      return ResponseEntity.ok().body(ApiResponse.of(list, String.format("%d Almacenes", list.size())));
+   public ResponseEntity<List<Almacen>> getAllAlmacenes() {
+      return ResponseEntity.ok().body(service.getAll());
    }
 
    @GetMapping("/almacen/{id}")
-   public ResponseEntity<ApiResponse<Almacen>> getAlmacenById(@PathVariable int id) {
+   public ResponseEntity<Almacen> getAlmacenById(@PathVariable int id) {
       Optional<Almacen> almacen = service.get(id);
       if (almacen.isEmpty()) {
-         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.of(null, "Almacen no Encontrado"));
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
       }
-      return ResponseEntity.ok().body(ApiResponse.of(almacen.get(), "Almacen Encontrado"));
+      return ResponseEntity.ok().body(almacen.get());
    }
 
    @DeleteMapping("/almacen/{id}")

@@ -47,8 +47,8 @@ class AlmacenControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Almacen 1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Almacen 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Almacen 1")));
       }
 
       @Test
@@ -70,7 +70,7 @@ class AlmacenControllerTest {
             mockMvc.perform(get("/api/almacen")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(2)));
+                        .andExpect(jsonPath("$", hasSize(2)));
       }
 
       @Test
@@ -83,8 +83,8 @@ class AlmacenControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":\"1\",\"nombre\":\"Almacen 1\"}"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Almacen 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Almacen 1")));
       }
 
       @Test
@@ -105,8 +105,8 @@ class AlmacenControllerTest {
             mockMvc.perform(get("/api/almacen/1")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Almacen 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Almacen 1")));
       }
 
       @Test

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.Fabricante;
 import soe.mdeis.m7.solid.service.FabricanteService;
 
@@ -29,32 +28,29 @@ public class FabricanteController {
    FabricanteService service;
 
    @GetMapping("/fabricante")
-   public ResponseEntity<ApiResponse<List<Fabricante>>> getFabricantes() {
+   public ResponseEntity<List<Fabricante>> getFabricantes() {
       var fabricantes = service.getAll();
-      return ResponseEntity.ok().body(ApiResponse.of(fabricantes, String.format("%d Fabricantes", fabricantes.size())));
+      return ResponseEntity.ok().body(fabricantes);
    }
 
    @PostMapping("/fabricante")
-   public ResponseEntity<ApiResponse<Fabricante>> registerFabricante(@RequestBody Fabricante fabricante) {
+   public ResponseEntity<Fabricante> registerFabricante(@RequestBody Fabricante fabricante) {
       if (StringUtils.isBlank(fabricante.getNombre())) {
-         return ResponseEntity.badRequest().body(
-               ApiResponse.of(fabricante, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(fabricante);
       }
       var newFabricante = service.save(fabricante);
       return ResponseEntity.created(URI.create("/fabricante/" + newFabricante.getId()))
-            .body(ApiResponse.of(newFabricante, "Fabricante Registrado"));
+            .body(newFabricante);
    }
 
    @PutMapping("/fabricante/{id}")
-   public ResponseEntity<ApiResponse<Fabricante>> updateFabricante(@PathVariable int id,
+   public ResponseEntity<Fabricante> updateFabricante(@PathVariable int id,
          @RequestBody Fabricante fabricante) {
       if (StringUtils.isBlank(fabricante.getNombre())) {
-         return ResponseEntity.badRequest().body(
-               ApiResponse.of(fabricante, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(fabricante);
       }
       var fabricanteUpdated = service.update(id, fabricante);
-      return ResponseEntity.ok().body(
-            ApiResponse.of(fabricanteUpdated, "Fabricante Actualizado"));
+      return ResponseEntity.ok().body(fabricanteUpdated);
    }
 
 }

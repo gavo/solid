@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.GrupoProducto;
 import soe.mdeis.m7.solid.service.GrupoProductoService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,31 +26,26 @@ public class GrupoProductoController {
    private GrupoProductoService service;
 
    @GetMapping("/grupo-producto")
-   public ResponseEntity<ApiResponse<List<GrupoProducto>>> getGruposProductos() {
-      var list = service.getAll();
-      return ResponseEntity.ok()
-            .body(ApiResponse.of(list, String.format("[%d] GrupoProductos", list.size())));
+   public ResponseEntity<List<GrupoProducto>> getGruposProductos() {
+      return ResponseEntity.ok().body(service.getAll());
    }
 
    @PostMapping("/grupo-producto")
-   public ResponseEntity<ApiResponse<GrupoProducto>> registerGrupoProducto(@RequestBody GrupoProducto grupoProducto) {
+   public ResponseEntity<GrupoProducto> registerGrupoProducto(@RequestBody GrupoProducto grupoProducto) {
       if (StringUtils.isBlank(grupoProducto.getNombre())) {
-         return ResponseEntity.badRequest()
-               .body(ApiResponse.of(grupoProducto, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(grupoProducto);
       }
       var newGrupo = service.save(grupoProducto);
-      return ResponseEntity.created(URI.create("/grupo-producto/" + newGrupo.getId()))
-            .body(ApiResponse.of(newGrupo, "GrupoCliente Registrado"));
+      return ResponseEntity.created(URI.create("/grupo-producto/" + newGrupo.getId())).body(newGrupo);
    }
 
    @PutMapping("/grupo-producto/{id}")
-   public ResponseEntity<ApiResponse<GrupoProducto>> updateGrupoProducto(@PathVariable int id,
+   public ResponseEntity<GrupoProducto> updateGrupoProducto(@PathVariable int id,
          @RequestBody GrupoProducto grupoProducto) {
       if (StringUtils.isBlank(grupoProducto.getNombre())) {
-         return ResponseEntity.badRequest()
-               .body(ApiResponse.of(grupoProducto, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(grupoProducto);
       }
       var grupoUpdated = service.update(id, grupoProducto);
-      return ResponseEntity.ok().body(ApiResponse.of(grupoUpdated, "GrupoCliente Actualizado"));
+      return ResponseEntity.ok().body(grupoUpdated);
    }
 }

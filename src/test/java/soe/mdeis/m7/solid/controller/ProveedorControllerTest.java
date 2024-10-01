@@ -43,7 +43,7 @@ class ProveedorControllerTest {
                         new Proveedor(3, "Proveedor 3")));
             mockMvc.perform(get("/api/proveedor").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(3)));
+                        .andExpect(jsonPath("$", hasSize(3)));
       }
 
       @Test
@@ -53,7 +53,7 @@ class ProveedorControllerTest {
             mockMvc.perform(post("/api/proveedor").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Proveedor 1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)));
+                        .andExpect(jsonPath("$.id", is(1)));
       }
 
       @Test
@@ -72,8 +72,8 @@ class ProveedorControllerTest {
             mockMvc.perform(put("/api/proveedor/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Proveedor 1\"}"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Proveedor 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Proveedor 1")));
       }
 
       @Test

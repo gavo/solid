@@ -42,8 +42,8 @@ class GrupoProductoControllerTest {
             mockMvc.perform(post("/api/grupo-producto").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Grupo 1\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Grupo 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Grupo 1")));
       }
 
       @Test
@@ -63,8 +63,8 @@ class GrupoProductoControllerTest {
             mockMvc.perform(put("/api/grupo-producto/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Grupo 1\"}"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.nombre", is("Grupo 1")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.nombre", is("Grupo 1")));
       }
 
       @Test
@@ -83,7 +83,7 @@ class GrupoProductoControllerTest {
 
             mockMvc.perform(get("/api/grupo-producto").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(3)));
+                        .andExpect(jsonPath("$", hasSize(3)));
       }
 
 }

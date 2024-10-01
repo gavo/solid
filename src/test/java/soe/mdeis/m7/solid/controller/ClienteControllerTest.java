@@ -48,12 +48,12 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.data.id", is(1)))
-                        .andExpect(jsonPath("$.data.code", is("123")))
-                        .andExpect(jsonPath("$.data.nombre", is("Juan Perez")))
-                        .andExpect(jsonPath("$.data.documento", is("1234123")))
-                        .andExpect(jsonPath("$.data.tipoDocumento", is("CI")))
-                        .andExpect(jsonPath("$.data.email", is("jp@email.com")));
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.code", is("123")))
+                        .andExpect(jsonPath("$.nombre", is("Juan Perez")))
+                        .andExpect(jsonPath("$.documento", is("1234123")))
+                        .andExpect(jsonPath("$.tipoDocumento", is("CI")))
+                        .andExpect(jsonPath("$.email", is("jp@email.com")));
       }
 
       @Test
@@ -63,7 +63,7 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"12341\",\"nombre\": \"\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.message", is("Falta el campo [nombre]")));
+                        .andExpect(jsonPath("$.nombre", is("")));
       }
 
       @Test
@@ -73,7 +73,7 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.message", is("Falta el campo [code]")));
+                        .andExpect(jsonPath("$.code", is("")));
       }
 
       @Test
@@ -83,7 +83,7 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.message", is("Falta el campo [documento]")));
+                        .andExpect(jsonPath("$.documento", is("")));
       }
 
       @Test
@@ -92,8 +92,7 @@ class ClienteControllerTest {
             mockMvc.perform(post("/api/cliente")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":null,\"email\":\"jp@email.com\"}"))
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.message", is("Falta el campo [tipoDocumento(NIT|CI)]")));
+                        .andExpect(status().isBadRequest());
       }
 
       @Test
@@ -112,7 +111,7 @@ class ClienteControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"\"}"))
                         .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.message", is("Falta el campo [email]")));
+                        .andExpect(jsonPath("$.email", is("")));
       }
 
       @Test
@@ -128,7 +127,7 @@ class ClienteControllerTest {
             mockMvc.perform(get("/api/cliente")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data", hasSize(3)));
+                        .andExpect(jsonPath("$", hasSize(3)));
       }
 
       @Test
@@ -139,7 +138,7 @@ class ClienteControllerTest {
             mockMvc.perform(get("/api/cliente/1")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.data.id", is(1)));
+                        .andExpect(jsonPath("$.id", is(1)));
       }
 
       @Test

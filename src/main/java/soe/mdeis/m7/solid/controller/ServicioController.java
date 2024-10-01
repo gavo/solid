@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.micrometer.common.util.StringUtils;
-import soe.mdeis.m7.solid.dto.ApiResponse;
 import soe.mdeis.m7.solid.model.Servicio;
 import soe.mdeis.m7.solid.service.ServicioService;
 
@@ -27,23 +26,21 @@ public class ServicioController {
    ServicioService service;
 
    @PostMapping("/servicio")
-   public ResponseEntity<ApiResponse<Servicio>> registerServicio(@RequestBody Servicio servicio) {
+   public ResponseEntity<Servicio> registerServicio(@RequestBody Servicio servicio) {
       if (StringUtils.isBlank(servicio.getNombre())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(servicio, "Falta el campo [nombre]"));
+         return ResponseEntity.badRequest().body(servicio);
       }
       if (StringUtils.isBlank(servicio.getCodigo())) {
-         return ResponseEntity.badRequest().body(ApiResponse.of(servicio, "Falta el campo [codigo]"));
+         return ResponseEntity.badRequest().body(servicio);
       }
       Servicio newServicio = service.save(servicio);
       return ResponseEntity.created(URI.create("/servicio/" + newServicio.getId()))
-            .body(ApiResponse.of(newServicio, "Servicio Registrado"));
+            .body(newServicio);
    }
 
    @GetMapping("/servicio")
-   public ResponseEntity<ApiResponse<List<Servicio>>> getServicios() {
-      var list = service.getAll();
-      return ResponseEntity.ok()
-            .body(ApiResponse.of(list, String.format("[%d] Servicios", list.size())));
+   public ResponseEntity<List<Servicio>> getServicios() {
+      return ResponseEntity.ok().body(service.getAll());
    }
 
 }
