@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api")
-@CrossOrigin(value = "http://localhost:300")
+@CrossOrigin(value = "http://localhost:3000")
 public class VentaController {
 
    @Autowired

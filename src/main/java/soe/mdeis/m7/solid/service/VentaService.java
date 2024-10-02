@@ -4,6 +4,7 @@ import java.util.List;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,14 +52,22 @@ public class VentaService {
             } else {
                   venta.setDescuento(subTotalDescuento);
             }
-
             venta.setTotal(venta.getSubTotal().subtract(venta.getDescuento()));
+            venta.getProductos().forEach(p -> {
+                  p.setVenta(venta);
+            });
+            venta.getServicios().forEach(s -> {
+                  s.setVenta(venta);
+            });
 
             if (venta.getFactura() != null) {
+                  Random random = new Random();
+                  venta.getFactura().setNro((10000 + random.nextInt(90000)) + "");
                   venta.getFactura().setTotal(venta.getTotal());
                   venta.getFactura().setFecha(LocalDateTime.now());
                   venta.getFactura().setCreditoFiscal(
                               venta.getTotal().multiply(BigDecimal.valueOf(0.15)).setScale(1, RoundingMode.HALF_UP));
+                  venta.getFactura().setVenta(venta);
             }
 
             return repository.save(venta);
