@@ -3,7 +3,6 @@ package soe.mdeis.m7.solid.model;
 import java.math.BigDecimal;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,11 +30,11 @@ public class ServicioRealizado {
 
    String observaciones;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne()
    @JoinColumn(name = "id_venta")
    Venta venta;
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(optional = false)
    @JoinColumn(name = "id_servicio", nullable = false)
    Servicio servicio;
 }

@@ -8,7 +8,6 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -41,17 +40,17 @@ public class Venta {
 
    BigDecimal total;
 
-   @ManyToOne(fetch = FetchType.LAZY, optional = true)
+   @ManyToOne(optional = true)
    @JoinColumn(name = "id_cliente", nullable = true)
    Cliente cliente;
 
    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL)
    Factura factura;
 
-   @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
    List<ServicioRealizado> servicios = new ArrayList<>();
 
-   @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
    List<ProductoVendido> productos = new ArrayList<>();
 
 }
