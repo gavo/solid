@@ -26,4 +26,16 @@ public class ClienteService {
    public Optional<Cliente> get(int id) {
       return repository.findById(id);
    }
+
+    public Cliente updateCliente(int id, Cliente cliente) {
+      Cliente uCliente = new Cliente();
+      uCliente.setId(id);
+      uCliente.setNombre(cliente.getNombre());
+      uCliente.setGrupoCliente(cliente.getGrupoCliente());
+      uCliente.setCode(cliente.getCode());
+      uCliente.setEmail(cliente.getEmail());
+      uCliente.setTipoDocumento(cliente.getTipoDocumento());
+      uCliente.setDocumento(cliente.getDocumento());
+      return repository.save(cliente);
+    }
 }

@@ -17,8 +17,7 @@ import soe.mdeis.m7.solid.service.ClienteService;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -149,5 +148,33 @@ class ClienteControllerTest {
             mockMvc.perform(get("/api/cliente/2")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Update Cliente")
+      void clienteUpdateRegisterCliente() throws Exception {
+            Mockito.when(service.updateCliente(Mockito.anyInt(), Mockito.any(Cliente.class)))
+                        .thenReturn(new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
+                                    null));
+            mockMvc.perform(put("/api/cliente/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"jp@email.com\"}"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id", is(1)))
+                        .andExpect(jsonPath("$.code", is("123")))
+                        .andExpect(jsonPath("$.nombre", is("Juan Perez")))
+                        .andExpect(jsonPath("$.documento", is("1234123")))
+                        .andExpect(jsonPath("$.tipoDocumento", is("CI")))
+                        .andExpect(jsonPath("$.email", is("jp@email.com")));
+      }
+
+      @Test
+      @DisplayName("Cliente Controller Update Cliente without Email")
+      void clienteControllerUpdateClienteWithoutEmail() throws Exception {
+            mockMvc.perform(put("/api/cliente/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"code\": \"12341\",\"nombre\": \"Juan Perez\", \"documento\":\"1234123\",\"tipoDocumento\":\"CI\",\"email\":\"\"}"))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.email", is("")));
       }
 }
