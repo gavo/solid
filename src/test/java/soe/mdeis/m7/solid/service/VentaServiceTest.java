@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +44,7 @@ class VentaServiceTest {
 
       @Test
       @DisplayName("Venta Service Save Venta all discounts without Services")
-      void ventaServiceSaveVentaAllDiscountsWithoutServices() {
+      void ventaServiceSaveVentaAllDiscountsWithoutServices() throws NoSuchAlgorithmException {
             GrupoCliente grupoCliente = new GrupoCliente(1, "Grupo Premium", BigDecimal.valueOf(20));
             Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         grupoCliente);
@@ -80,7 +81,7 @@ class VentaServiceTest {
 
       @Test
       @DisplayName("Venta Service Save Venta OF Services with Discount but GrupoCLiente")
-      void ventaServiceSaveVentaOfServicesWithDiscountButGrupoCliente() {
+      void ventaServiceSaveVentaOfServicesWithDiscountButGrupoCliente() throws NoSuchAlgorithmException {
             Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         null);
 
@@ -112,7 +113,7 @@ class VentaServiceTest {
 
       @Test
       @DisplayName("Venta Service save Venta without clientes and factura")
-      void vetaServiceVentaWithoutClientesAndFactura() {
+      void vetaServiceVentaWithoutClientesAndFactura() throws NoSuchAlgorithmException {
             Venta venta = new Venta();
             Producto p1 = new Producto(
                         1, "Chocolate", "chocolate", 1, "1121",

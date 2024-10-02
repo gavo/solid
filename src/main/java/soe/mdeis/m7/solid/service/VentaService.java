@@ -1,5 +1,7 @@
 package soe.mdeis.m7.solid.service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -18,7 +20,7 @@ public class VentaService {
       @Autowired
       VentaRepository repository;
 
-      public Venta save(Venta venta) {
+      public Venta save(Venta venta) throws NoSuchAlgorithmException {
             venta.setFecha(LocalDateTime.now());
 
             BigDecimal subTotalDescuentoProducto = venta.getProductos().stream()
@@ -53,16 +55,12 @@ public class VentaService {
                   venta.setDescuento(subTotalDescuento);
             }
             venta.setTotal(venta.getSubTotal().subtract(venta.getDescuento()));
-            venta.getProductos().forEach(p -> {
-                  p.setVenta(venta);
-            });
-            venta.getServicios().forEach(s -> {
-                  s.setVenta(venta);
-            });
+            venta.getProductos().forEach(p -> p.setVenta(venta));
+            venta.getServicios().forEach(s -> s.setVenta(venta));
 
             if (venta.getFactura() != null) {
-                  Random random = new Random();
-                  venta.getFactura().setNro((10000 + random.nextInt(90000)) + "");
+                  Random rand = SecureRandom.getInstanceStrong();
+                  venta.getFactura().setNro(rand.nextInt(1,100000) + "");
                   venta.getFactura().setTotal(venta.getTotal());
                   venta.getFactura().setFecha(LocalDateTime.now());
                   venta.getFactura().setCreditoFiscal(

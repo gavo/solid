@@ -1,6 +1,7 @@
 package soe.mdeis.m7.solid.controller;
 
 import java.net.URI;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class VentaController {
    VentaService service;
 
    @PostMapping("/venta")
-   public ResponseEntity<Venta> registerSale(@RequestBody Venta venta) {
+   public ResponseEntity<Venta> registerSale(@RequestBody Venta venta) throws NoSuchAlgorithmException {
       var sale = service.save(venta);
       return ResponseEntity.created(URI.create("/venta/" + sale.getId())).body(sale);
    }
