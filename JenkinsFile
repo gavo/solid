@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Get Repository') {
+            steps {
+                git 'https://github.com/gavo/solid'
+            }
+        }
+        stage('Run Tests') {
+            steps {
+                bat './mvnw test'
+            }
+        }
+        stage('Run Project'){
+            steps{
+                bat './mvnw spring-boot:run'
+            }
+        }
+    }
+}
