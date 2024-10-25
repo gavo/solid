@@ -10,6 +10,7 @@ Proyecto backen para venta
 -  usuario mariadb **root**
 -  password mariadb **root**
 -  Tener disponible el puerto **8080** para la aplicación
+-  NSSM (se puede instalar usando Chocolatey) `choco install nssm`
 
 ### Instalar dependencias y ejecutar test
 

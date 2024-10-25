@@ -4,18 +4,73 @@ pipeline {
     stages {
         stage('Get Repository') {
             steps {
-                git 'https://github.com/gavo/solid'
+                echo 'Clonando repositorio desde GitHub...'
+                git branch: 'master', url: 'https://github.com/gavo/solid'
             }
         }
+
         stage('Run Tests') {
             steps {
+                echo 'Ejecutando tests...'
                 bat './mvnw test'
             }
         }
-        stage('Run Project'){
-            steps{
-                bat './mvnw spring-boot:run'
+
+        stage('Build Project') {
+            steps {
+                echo 'Construyendo el proyecto con Maven...'
+                bat './mvnw clean package'
             }
+        }
+
+        stage('Stop Existing Service') {
+            steps {
+                script {
+                    def serviceExists = powershell returnStatus: true, script: '''
+                    $service = Get-Service -Name "solid" -ErrorAction SilentlyContinue
+                    if ($service) {
+                        Stop-Service "solid" -Force
+                    }
+                    '''
+                    if (serviceExists == 0) {
+                        echo 'Servicio solid detenido.'
+                    } else {
+                        echo 'Servicio solid no está en ejecución, continuando...'
+                    }
+                }
+            }
+        }
+
+        stage('Copy JAR to C:\\solid') {
+            steps {
+                echo 'Copiando el archivo JAR a C:\\solid...'
+                bat '''
+                if not exist C:\\solid (
+                    mkdir C:\\solid
+                )
+                copy /Y target\\solid-0.0.1-SNAPSHOT.jar C:\\solid\\
+                '''
+            }
+        }
+
+        stage('Start or Update Service with NSSM') {
+            steps {
+                echo 'Iniciando o actualizando el servicio solid usando nssm...'
+                bat '''
+                    nssm install solid "java" "-jar C:\\solid\\solid-0.0.1-SNAPSHOT.jar"
+                    nssm set solid Start SERVICE_AUTO_START
+                    nssm restart solid
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completado exitosamente.'
+        }
+        failure {
+            echo 'El pipeline falló.'
         }
     }
 }
