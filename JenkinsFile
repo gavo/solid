@@ -1,11 +1,56 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'SERVER_PORT', defaultValue: '8080', description: 'Puerto destinado para el API')
+        string(name: 'SERVER_ADDRESS', defaultValue: 'localhost', description: 'Host del API')
+        string(name: 'DB_HOST', defaultValue: 'localhost', description:'Host de la base de datos')
+        string(name: 'DB_PORT', defaultValue: '3306', description: 'Puerto del Gestor de base de datos MariaDb')
+        string(name: 'DB_DATA_BASE', defaultValue: 'db_solid', description:'Nombre de la base de datos')
+        string(name: 'DB_USERNAME', defaultValue: 'root', description: 'Nombre de usuario root de la base de datos')
+        string(name: 'DB_PASSWORD', defaultValue: 'root', description: 'Password del usuario root de la base de datos')
+        string(name: 'FRONTEND_PORT', defaultValue: '3000', description: 'Puerto destinado para el Frontend')
+    }
+
     stages {
         stage('Get Repository') {
             steps {
                 echo 'Clonando repositorio desde GitHub...'
                 git branch: 'master', url: 'https://github.com/gavo/solid'
+            }
+        }
+
+        stage('Preparar application.properties') {
+            steps {
+                script {
+                    def propertiesContent = """
+spring.application.name=solid
+
+# Conexión a MariaDB
+spring.datasource.url=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_DATA_BASE}?createDatabaseIfNotExist=true
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+
+# JPA/Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+
+# Swagger
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+springdoc.swagger-ui.path=/swagger
+
+# Server Port
+server.port=${SERVER_PORT}
+
+# FrontEnd Port
+frontend.port=${FRONTEND_PORT}
+"""
+
+                    writeFile file: 'src/main/resources/application.properties', text: propertiesContent
+                }
             }
         }
 
