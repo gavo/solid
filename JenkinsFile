@@ -1,21 +1,121 @@
 pipeline {
     agent any
 
+    parameters {
+        string(name: 'SERVER_PORT', defaultValue: '8080', description: 'Puerto destinado para el API')
+        string(name: 'SERVER_ADDRESS', defaultValue: 'localhost', description: 'Host del API')
+        string(name: 'DB_HOST', defaultValue: 'localhost', description:'Host de la base de datos')
+        string(name: 'DB_PORT', defaultValue: '3306', description: 'Puerto del Gestor de base de datos MariaDb')
+        string(name: 'DB_DATA_BASE', defaultValue: 'db_solid', description:'Nombre de la base de datos')
+        string(name: 'DB_USERNAME', defaultValue: 'root', description: 'Nombre de usuario root de la base de datos')
+        string(name: 'DB_PASSWORD', defaultValue: 'root', description: 'Password del usuario root de la base de datos')
+        string(name: 'FRONTEND_PORT', defaultValue: '3000', description: 'Puerto destinado para el Frontend')
+    }
+
     stages {
         stage('Get Repository') {
             steps {
-                git 'https://github.com/gavo/solid'
+                echo 'Clonando repositorio desde GitHub...'
+                git branch: 'master', url: 'https://github.com/gavo/solid'
             }
         }
+
+        stage('Preparar application.properties') {
+            steps {
+                script {
+                    def propertiesContent = """
+spring.application.name=solid
+
+# Conexión a MariaDB
+spring.datasource.url=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_DATA_BASE}?createDatabaseIfNotExist=true
+spring.datasource.username=${DB_USERNAME}
+spring.datasource.password=${DB_PASSWORD}
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+
+# JPA/Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
+
+# Swagger
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+springdoc.swagger-ui.path=/swagger
+
+# Server Port
+server.port=${SERVER_PORT}
+
+# FrontEnd Port
+frontend.port=${FRONTEND_PORT}
+"""
+
+                    writeFile file: 'src/main/resources/application.properties', text: propertiesContent
+                }
+            }
+        }
+
         stage('Run Tests') {
             steps {
+                echo 'Ejecutando tests...'
                 bat './mvnw test'
             }
         }
-        stage('Run Project'){
-            steps{
-                bat './mvnw spring-boot:run'
+
+        stage('Build Project') {
+            steps {
+                echo 'Construyendo el proyecto con Maven...'
+                bat './mvnw clean package'
             }
+        }
+
+        stage('Stop Existing Service') {
+            steps {
+                script {
+                    def serviceExists = powershell returnStatus: true, script: '''
+                    $service = Get-Service -Name "solid" -ErrorAction SilentlyContinue
+                    if ($service) {
+                        Stop-Service "solid" -Force
+                    }
+                    '''
+                    if (serviceExists == 0) {
+                        echo 'Servicio solid detenido.'
+                    } else {
+                        echo 'Servicio solid no está en ejecución, continuando...'
+                    }
+                }
+            }
+        }
+
+        stage('Copy JAR to C:\\solid') {
+            steps {
+                echo 'Copiando el archivo JAR a C:\\solid...'
+                bat '''
+                if not exist C:\\solid (
+                    mkdir C:\\solid
+                )
+                copy /Y target\\solid-0.0.1-SNAPSHOT.jar C:\\solid\\
+                '''
+            }
+        }
+
+        stage('Start or Update Service with NSSM') {
+            steps {
+                echo 'Iniciando o actualizando el servicio solid usando nssm...'
+                bat '''
+                    nssm install solid "java" "-jar C:\\solid\\solid-0.0.1-SNAPSHOT.jar"
+                    nssm set solid Start SERVICE_AUTO_START
+                    nssm restart solid
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completado exitosamente.'
+        }
+        failure {
+            echo 'El pipeline falló.'
         }
     }
 }
