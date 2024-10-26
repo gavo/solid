@@ -26,33 +26,17 @@ pipeline {
             steps {
                 script {
                     def propertiesContent = """
-spring.application.name=solid
+DB_USERNAME=${DB_USERNAME}
+DB_PASSWORD=${DB_PASSWORD}
+DB_HOST=${DB_HOST}
+DB_PORT=${DB_PORT}
+DB_DATABASE_NAME=${DB_DATA_BASE}
 
-# Conexión a MariaDB
-spring.datasource.url=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_DATA_BASE}?createDatabaseIfNotExist=true
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-
-# JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
-
-# Swagger
-springdoc.api-docs.enabled=true
-springdoc.swagger-ui.enabled=true
-springdoc.swagger-ui.path=/swagger
-
-# Server Port
-server.port=${SERVER_PORT}
-
-# FrontEnd Port
-frontend.port=${FRONTEND_PORT}
-frontend.host=${FRONTEND_HOST}
+S_PORT=${SERVER_PORT}
+FE_HOST=${FRONTEND_HOST}
+FE_PORT=${FRONTEND_PORT}
 """
-
-                    writeFile file: 'src/main/resources/application.properties', text: propertiesContent
+                    writeFile file: '.env', text: propertiesContent
                 }
             }
         }
