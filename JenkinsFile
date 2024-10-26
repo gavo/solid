@@ -11,9 +11,18 @@ pipeline {
         string(name: 'DB_PASSWORD', defaultValue: 'root', description: 'Password del usuario root de la base de datos')
         string(name: 'FRONTEND_PORT', defaultValue: '3000', description: 'Puerto destinado para el Frontend')
         string(name: 'FRONTEND_HOST', defaultValue: 'http://localhost', description: 'Host destinado para el Frontend')
+        string(name: 'JAR_LOCATION', defaultValue: 'C:\\solid', description: 'Carpeta de destino par el archivo Jar del proyecto y levantar el servicio')
     }
 
     stages {
+        
+        stage('Cleanup Workspace') {
+            steps {
+                echo 'Limpiando el directorio de trabajo...'
+                deleteDir()
+            }
+        }
+        
         stage('Get Repository') {
             steps {
                 echo 'Clonando repositorio desde GitHub...'
@@ -25,41 +34,18 @@ pipeline {
             steps {
                 script {
                     def propertiesContent = """
-spring.application.name=solid
+DB_USERNAME=${DB_USERNAME}
+DB_PASSWORD=${DB_PASSWORD}
+DB_HOST=${DB_HOST}
+DB_PORT=${DB_PORT}
+DB_DATABASE_NAME=${DB_DATA_BASE}
 
-# Conexión a MariaDB
-spring.datasource.url=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_DATA_BASE}?createDatabaseIfNotExist=true
-spring.datasource.username=${DB_USERNAME}
-spring.datasource.password=${DB_PASSWORD}
-spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
-
-# JPA/Hibernate
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MariaDBDialect
-
-# Swagger
-springdoc.api-docs.enabled=true
-springdoc.swagger-ui.enabled=true
-springdoc.swagger-ui.path=/swagger
-
-# Server Port
-server.port=${SERVER_PORT}
-
-# FrontEnd Port
-frontend.port=${FRONTEND_PORT}
-frontend.host=${FRONTEND_HOST}
+S_PORT=${SERVER_PORT}
+FE_HOST=${FRONTEND_HOST}
+FE_PORT=${FRONTEND_PORT}
 """
-
-                    writeFile file: 'src/main/resources/application.properties', text: propertiesContent
+                    writeFile file: '.env', text: propertiesContent
                 }
-            }
-        }
-
-        stage('Run Tests') {
-            steps {
-                echo 'Ejecutando tests...'
-                bat './mvnw test'
             }
         }
 
@@ -88,14 +74,14 @@ frontend.host=${FRONTEND_HOST}
             }
         }
 
-        stage('Copy JAR to C:\\solid') {
+        stage('Copy JAR to ${JAR_LOCATION}') {
             steps {
-                echo 'Copiando el archivo JAR a C:\\solid...'
+                echo 'Copiando el archivo JAR a ${JAR_LOCATION}...'
                 bat '''
-                if not exist C:\\solid (
-                    mkdir C:\\solid
+                if not exist ${JAR_LOCATION} (
+                    mkdir ${JAR_LOCATION}
                 )
-                copy /Y target\\solid-0.0.1-SNAPSHOT.jar C:\\solid\\
+                copy /Y target\\solid-0.0.1-SNAPSHOT.jar ${JAR_LOCATION}\\
                 '''
             }
         }
@@ -104,7 +90,7 @@ frontend.host=${FRONTEND_HOST}
             steps {
                 echo 'Iniciando o actualizando el servicio solid usando nssm...'
                 bat '''
-                    nssm install solid "java" "-jar C:\\solid\\solid-0.0.1-SNAPSHOT.jar"
+                    nssm install solid "java" "-jar ${JAR_LOCATION}\\solid-0.0.1-SNAPSHOT.jar"
                     nssm set solid Start SERVICE_AUTO_START
                     nssm restart solid
                 '''

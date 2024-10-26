@@ -87,3 +87,5 @@ Temporary Items
 .mysql
 sonarqube.bat
 src/main/resources/application.properties
+
+/.env
