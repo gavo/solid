@@ -93,23 +93,23 @@ frontend.host=${FRONTEND_HOST}
         stage('Copy JAR to ${JAR_LOCATION}') {
             steps {
                 echo 'Copiando el archivo JAR a ${JAR_LOCATION}...'
-                bat '''
+                bat """
                 if not exist ${JAR_LOCATION} (
                     mkdir ${JAR_LOCATION}
                 )
                 copy /Y target\\solid-0.0.1-SNAPSHOT.jar ${JAR_LOCATION}\\
-                '''
+                """
             }
         }
 
         stage('Start or Update Service with NSSM') {
             steps {
                 echo 'Iniciando o actualizando el servicio solid usando nssm...'
-                bat '''
+                bat """
                     nssm install solid "java" "-jar ${JAR_LOCATION}\\solid-0.0.1-SNAPSHOT.jar"
                     nssm set solid Start SERVICE_AUTO_START
                     nssm restart solid
-                '''
+                """
             }
         }
     }
