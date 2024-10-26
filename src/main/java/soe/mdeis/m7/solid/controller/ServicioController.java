@@ -14,12 +14,10 @@ import soe.mdeis.m7.solid.service.ServicioService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("api")
-@CrossOrigin(value = "http://localhost:3000")
 public class ServicioController {
 
    @Autowired

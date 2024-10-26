@@ -15,14 +15,12 @@ import soe.mdeis.m7.solid.service.GrupoClienteService;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api")
-@CrossOrigin(value = "http://localhost:3000")
 public class GrupoClienteController {
 
    @Autowired
