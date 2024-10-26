@@ -15,6 +15,14 @@ pipeline {
     }
 
     stages {
+        
+        stage('Cleanup Workspace') {
+            steps {
+                echo 'Limpiando el directorio de trabajo...'
+                deleteDir()
+            }
+        }
+        
         stage('Get Repository') {
             steps {
                 echo 'Clonando repositorio desde GitHub...'
