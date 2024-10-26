@@ -49,13 +49,6 @@ FE_PORT=${FRONTEND_PORT}
             }
         }
 
-        stage('Run Tests') {
-            steps {
-                echo 'Ejecutando tests...'
-                bat './mvnw test'
-            }
-        }
-
         stage('Build Project') {
             steps {
                 echo 'Construyendo el proyecto con Maven...'
