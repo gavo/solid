@@ -22,6 +22,30 @@ pipeline {
                 deleteDir()
             }
         }
+
+        stage('Stop Existing Service') {
+            steps {
+                script {
+                    echo 'Forzando la detención y eliminación del servicio solid sin afectar Jenkins...'
+                    
+                    def serviceExists = powershell returnStatus: true, script: '''
+                    $service = Get-Service -Name "solid" -ErrorAction SilentlyContinue
+                    if ($service) {
+                        Stop-Service "solid" -Force
+                        $solidPid = (Get-WmiObject Win32_Service | Where-Object { $_.Name -eq 'solid' }).ProcessId
+                        if ($solidPid) {
+                            Stop-Process -Id $solidPid -Force
+                        }
+                    }
+                    '''
+
+                    powershell '''
+                    sc delete solid
+                    Start-Sleep -Seconds 5
+                    '''
+                }
+            }
+        }
         
         stage('Get Repository') {
             steps {
@@ -69,24 +93,6 @@ frontend.host=${FRONTEND_HOST}
             steps {
                 echo 'Construyendo el proyecto con Maven...'
                 bat './mvnw clean package'
-            }
-        }
-
-        stage('Stop Existing Service') {
-            steps {
-                script {
-                    def serviceExists = powershell returnStatus: true, script: '''
-                    $service = Get-Service -Name "solid" -ErrorAction SilentlyContinue
-                    if ($service) {
-                        Stop-Service "solid" -Force
-                    }
-                    '''
-                    if (serviceExists == 0) {
-                        echo 'Servicio solid detenido.'
-                    } else {
-                        echo 'Servicio solid no está en ejecución, continuando...'
-                    }
-                }
             }
         }
 
