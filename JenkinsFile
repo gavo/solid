@@ -9,19 +9,12 @@ pipeline {
         string(name: 'DB_DATA_BASE', defaultValue: 'db_solid', description:'Nombre de la base de datos')
         string(name: 'DB_USERNAME', defaultValue: 'root', description: 'Nombre de usuario root de la base de datos')
         string(name: 'DB_PASSWORD', defaultValue: 'root', description: 'Password del usuario root de la base de datos')
-        string(name: 'FRONTEND_PORT', defaultValue: '3000', description: 'Puerto destinado para el Frontend')
+        string(name: 'FRONTEND_PORT', defaultValue: '90', description: 'Puerto destinado para el Frontend')
         string(name: 'FRONTEND_HOST', defaultValue: 'http://localhost', description: 'Host destinado para el Frontend')
         string(name: 'JAR_LOCATION', defaultValue: 'C:\\solid', description: 'Carpeta de destino par el archivo Jar del proyecto y levantar el servicio')
-    }
+    } 
 
     stages {
-        
-        stage('Cleanup Workspace') {
-            steps {
-                echo 'Limpiando el directorio de trabajo...'
-                deleteDir()
-            }
-        }
 
         stage('Stop Existing Service') {
             steps {
