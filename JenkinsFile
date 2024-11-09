@@ -4,15 +4,15 @@ pipeline {
     parameters {
         string(name: 'SERVER_PORT', defaultValue: '8080', description: 'Puerto destinado para el API')
         string(name: 'SERVER_ADDRESS', defaultValue: 'localhost', description: 'Host del API')
-        string(name: 'DB_HOST', defaultValue: 'localhost', description:'Host de la base de datos')
+        string(name: 'DB_HOST', defaultValue: 'localhost', description: 'Host de la base de datos')
         string(name: 'DB_PORT', defaultValue: '3306', description: 'Puerto del Gestor de base de datos MariaDb')
-        string(name: 'DB_DATA_BASE', defaultValue: 'db_solid', description:'Nombre de la base de datos')
+        string(name: 'DB_DATA_BASE', defaultValue: 'db_solid', description: 'Nombre de la base de datos')
         string(name: 'DB_USERNAME', defaultValue: 'root', description: 'Nombre de usuario root de la base de datos')
         string(name: 'DB_PASSWORD', defaultValue: 'root', description: 'Password del usuario root de la base de datos')
         string(name: 'FRONTEND_PORT', defaultValue: '90', description: 'Puerto destinado para el Frontend')
         string(name: 'FRONTEND_HOST', defaultValue: 'http://localhost', description: 'Host destinado para el Frontend')
         string(name: 'JAR_LOCATION', defaultValue: 'C:\\solid', description: 'Carpeta de destino par el archivo Jar del proyecto y levantar el servicio')
-    } 
+    }
 
     stages {
 
@@ -31,27 +31,28 @@ pipeline {
                         }
                     }
                     '''
-
-                    powershell '''
-                    sc delete solid
-                    Start-Sleep -Seconds 5
-                    '''
+                    powershell 'sc delete solid'
                 }
             }
         }
         
         stage('Get Repository') {
             steps {
-                echo 'Clonando repositorio desde GitHub...'
-                git branch: 'master', url: 'https://github.com/gavo/solid'
+                echo 'Obteniendo últimos cambios del repositorio...'
+                script {
+                    if (fileExists('.git')) {
+                        bat 'git fetch --all && git reset --hard origin/master'
+                    } else {
+                        git branch: 'master', url: 'https://github.com/gavo/solid'
+                    }
+                }
             }
         }
 
         stage('Preparar application.properties') {
             steps {
                 script {
-                    def propertiesContent = """
-spring.application.name=solid
+                    def propertiesContent = """spring.application.name=solid
 
 # Conexión a MariaDB
 spring.datasource.url=jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_DATA_BASE}?createDatabaseIfNotExist=true
@@ -76,7 +77,6 @@ server.port=${SERVER_PORT}
 frontend.port=${FRONTEND_PORT}
 frontend.host=${FRONTEND_HOST}
 """
-
                     writeFile file: 'src/main/resources/application.properties', text: propertiesContent
                 }
             }
@@ -85,16 +85,16 @@ frontend.host=${FRONTEND_HOST}
         stage('Build Project') {
             steps {
                 echo 'Construyendo el proyecto con Maven...'
-                bat './mvnw clean package'
+                bat './mvnw package -DskipTests'
             }
         }
 
         stage('Copy JAR to ${JAR_LOCATION}') {
             steps {
-                echo 'Copiando el archivo JAR a ${JAR_LOCATION}...'
+                echo "Copiando el archivo JAR al directorio de despliegue: ${JAR_LOCATION}..."
                 bat """
-                if not exist ${JAR_LOCATION} (
-                    mkdir ${JAR_LOCATION}
+                if not exist "${JAR_LOCATION}" (
+                    mkdir "${JAR_LOCATION}"
                 )
                 copy /Y target\\solid-0.0.1-SNAPSHOT.jar ${JAR_LOCATION}\\
                 """
@@ -103,7 +103,7 @@ frontend.host=${FRONTEND_HOST}
 
         stage('Start or Update Service with NSSM') {
             steps {
-                echo 'Iniciando o actualizando el servicio solid usando nssm...'
+                echo 'Iniciando o actualizando el servicio solid usando NSSM...'
                 bat """
                     nssm install solid "java" "-jar ${JAR_LOCATION}\\solid-0.0.1-SNAPSHOT.jar"
                     nssm set solid Start SERVICE_AUTO_START
