@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.5</version>
+		<version>3.3.8</version>
 		<relativePath />
 	</parent>
 	<groupId>soe.mdeis.m7</groupId>
 	<artifactId>solid</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>solid</name>
 	<description>Demo project for Spring Boot</description>
 	<url />
@@ -56,7 +56,6 @@
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>2.7.3</version>
 		</dependency>
 
 		<dependency>
