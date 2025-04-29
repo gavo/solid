@@ -66,7 +66,7 @@ public class VentaService {
             Random rand = SecureRandom.getInstanceStrong();
             venta.getFactura().setNro(rand.nextInt(1, 100000) + "");
             venta.getFactura().setTotal(venta.getTotal());
-            venta.getFactura().setFecha(LocalDateTime.now());
+            venta.getFactura().setFecha(venta.getFecha());
             venta.getFactura().setCreditoFiscal(
                     venta.getTotal().multiply(BigDecimal.valueOf(0.15)).setScale(1, RoundingMode.HALF_UP));
             venta.getFactura().setVenta(venta);

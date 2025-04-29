@@ -8,12 +8,16 @@ import soe.mdeis.m7.solid.repository.*;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class FakeDataService {
 
     private static final Faker faker = new Faker(new Locale("es-MX"));
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Autowired
     ProveedorRepository proveedorRepository;
@@ -36,6 +40,12 @@ public class FakeDataService {
     @Autowired
     ClienteRepository clienteRepository;
 
+    @Autowired
+    VentaRepository ventaRepository;
+
+    @Autowired
+    VentaService ventaService;
+
     public List<Cliente> newFakeClientes(int quanity) {
         List<Cliente> list = new ArrayList<>();
         final HashSet<String> names = new HashSet<>();
@@ -51,7 +61,7 @@ public class FakeDataService {
                     .email(faker.internet().emailAddress())
                     .grupoCliente(grupoClientes.get(faker.number().numberBetween(0l, grupoClientes.size() * 3l)))
                     .build();
-            if(!names.contains(cliente.getNombre())){
+            if (!names.contains(cliente.getNombre())) {
                 names.add(cliente.getNombre());
                 list.add(clienteRepository.save(cliente));
                 n++;
@@ -231,6 +241,63 @@ public class FakeDataService {
             ) {
                 names.add(fabricante.getNombre());
                 list.add(fabricanteRepository.save(fabricante));
+                n++;
+            }
+        }
+        return list;
+    }
+
+    public List<Venta> newFakeVentas(int cantidad) {
+        List<Venta> list = new ArrayList<>();
+        List<Venta> auxList = ventaRepository.findAll();
+        Venta aux = auxList.isEmpty() ? null : auxList.getLast();
+        LocalDateTime fecha = aux != null ? aux.getFecha() : LocalDateTime.parse("2010-01-01 00:00:01", formatter);
+        int n = 0;
+        while (n < cantidad) {
+            fecha = fecha.plusMinutes(faker.number().numberBetween(1, 60));
+            Venta venta = new Venta();
+            List<ProductoVendido> productList = new ArrayList<>();
+            List<ServicioRealizado> serviceList = new ArrayList<>();
+            int cantP = faker.number().numberBetween(0, 10);
+            for (int i = 0; i < cantP; i++) {
+                Producto producto = productoRepository.getReferenceById(faker.number().numberBetween(1, productoRepository.count()));
+                ProductoVendido productoVendido = ProductoVendido.builder()
+                        .producto(producto)
+                        .venta(venta)
+                        .precio(producto.getPrecio())
+                        .cantidad(faker.number().numberBetween(1, 10))
+                        .descuento(BigDecimal.valueOf(faker.number().numberBetween(0, producto.getPrecio().intValue() / 2)))
+                        .build();
+                productList.add(productoVendido);
+            }
+            int cantS = faker.number().numberBetween(0, 5);
+            for (int i = 0; i < cantS; i++) {
+                Servicio servicio = servicioRepository.getReferenceById(faker.number().numberBetween(1, servicioRepository.count()));
+                ServicioRealizado servicioRealizado = ServicioRealizado.builder()
+                        .servicio(servicio)
+                        .venta(venta)
+                        .precio(servicio.getPrecio())
+                        .descuento(BigDecimal.valueOf(faker.number().numberBetween(0, servicio.getPrecio().intValue() / 3)))
+                        .build();
+                serviceList.add(servicioRealizado);
+            }
+            venta.setFecha(fecha);
+            venta.setProductos(productList);
+            venta.setServicios(serviceList);
+            venta.setCliente(clienteRepository.getReferenceById(faker.number().numberBetween(1, clienteRepository.count())));
+            if (faker.number().numberBetween(0, 10) % 2 == 0) {
+                Factura factura = Factura.builder()
+                        .nit(venta.getCliente().getDocumento())
+                        .razonSocial(venta.getCliente().getNombre())
+                        .build();
+                venta.setFactura(factura);
+            }
+            if (!venta.getProductos().isEmpty() || !venta.getServicios().isEmpty()) {
+                try {
+                    list.add(ventaService.save(venta, venta.getFecha()));
+                } catch (NoSuchAlgorithmException e) {
+                    throw new RuntimeException(e);
+                }
                 n++;
             }
         }
