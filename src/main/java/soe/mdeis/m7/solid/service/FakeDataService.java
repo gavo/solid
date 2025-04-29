@@ -3,14 +3,8 @@ package soe.mdeis.m7.solid.service;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import soe.mdeis.m7.solid.model.Fabricante;
-import soe.mdeis.m7.solid.model.GrupoProducto;
-import soe.mdeis.m7.solid.model.Producto;
-import soe.mdeis.m7.solid.model.Proveedor;
-import soe.mdeis.m7.solid.repository.FabricanteRepository;
-import soe.mdeis.m7.solid.repository.GrupoProductoRepository;
-import soe.mdeis.m7.solid.repository.ProductoRepository;
-import soe.mdeis.m7.solid.repository.ProveedorRepository;
+import soe.mdeis.m7.solid.model.*;
+import soe.mdeis.m7.solid.repository.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -32,6 +26,28 @@ public class FakeDataService {
     @Autowired
     ProductoRepository productoRepository;
 
+    @Autowired
+    ServicioRepository servicioRepository;
+
+    public List<Servicio> newFakeServicios(int quantity) {
+        final List<Servicio> list = new ArrayList<>();
+        final HashSet<String> names = new HashSet<>();
+        int n = 0;
+        while (n < quantity) {
+            Servicio servicio = Servicio.builder()
+                    .codigo("SVC-" + faker.number().digits(10))
+                    .nombre(faker.company().buzzword() + " " + faker.company().industry())
+                    .precio(BigDecimal.valueOf(faker.number().randomDouble(2, 20, 500)))
+                    .build();
+            if (!names.contains(servicio.getNombre())) {
+                list.add(servicioRepository.save(servicio));
+                names.add(servicio.getNombre());
+                n++;
+            }
+        }
+        return list;
+    }
+
     public List<Producto> newFakeProductos(int quatity) {
         final List<Producto> list = new ArrayList<>();
         final HashMap<Long, Proveedor> proveedores = new HashMap<>();
@@ -50,7 +66,7 @@ public class FakeDataService {
         int n = 0;
         while (n < quatity) {
             final String name = faker.commerce().productName();
-            if(!names.contains(name)) {
+            if (!names.contains(name)) {
                 Producto producto = Producto.builder()
                         .nombre(name)
                         .nombreExtranjero(name + " " + faker.country().countryCode2())

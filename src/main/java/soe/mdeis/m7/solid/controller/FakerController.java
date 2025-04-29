@@ -3,10 +3,7 @@ package soe.mdeis.m7.solid.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import soe.mdeis.m7.solid.model.Fabricante;
-import soe.mdeis.m7.solid.model.GrupoProducto;
-import soe.mdeis.m7.solid.model.Producto;
-import soe.mdeis.m7.solid.model.Proveedor;
+import soe.mdeis.m7.solid.model.*;
 import soe.mdeis.m7.solid.service.FakeDataService;
 
 import java.util.List;
@@ -18,7 +15,12 @@ public class FakerController {
     @Autowired
     FakeDataService service;
 
-    @GetMapping("/productos/{cantidad}")
+    @GetMapping("/servicio/{cantidad}")
+    public ResponseEntity<List<Servicio>> createFakeServicios(@PathVariable int cantidad){
+        return ResponseEntity.ok(service.newFakeServicios((cantidad)));
+    }
+
+    @GetMapping("/producto/{cantidad}")
     public ResponseEntity<List<Producto>> createFakeProductos(@PathVariable int cantidad){
         return ResponseEntity.ok(service.newFakeProductos((cantidad)));
     }
