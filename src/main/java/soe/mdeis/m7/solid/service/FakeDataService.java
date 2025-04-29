@@ -4,12 +4,14 @@ import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import soe.mdeis.m7.solid.model.Fabricante;
+import soe.mdeis.m7.solid.model.GrupoProducto;
 import soe.mdeis.m7.solid.repository.FabricanteRepository;
 import soe.mdeis.m7.solid.repository.GrupoProductoRepository;
 import soe.mdeis.m7.solid.repository.ProductoRepository;
 import soe.mdeis.m7.solid.repository.ProveedorRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -29,19 +31,39 @@ public class FakeDataService {
     @Autowired
     ProductoRepository productoRepository;
 
+    public List<GrupoProducto> newFakesGrupoProducto(int quantity) {
+        List<GrupoProducto> list = new ArrayList<>();
+        HashSet<String> names = new HashSet<>();
+        int n = 0;
+        while (n < quantity) {
+            GrupoProducto grupoProducto = GrupoProducto.builder()
+                    .nombre(faker.commerce().department())
+                    .build();
+            if (!names.contains(grupoProducto.getNombre()) &&
+                    grupoProductoRepository.findByNombre(grupoProducto.getNombre()).isEmpty()) {
+                names.add(grupoProducto.getNombre());
+                list.add(grupoProductoRepository.save(grupoProducto));
+                n++;
+            }
+        }
+        return list;
+    }
+
     public List<Fabricante> newFakesFabricantes(int quantity) {
         List<Fabricante> list = new ArrayList<>();
+        HashSet<String> names = new HashSet<>();
         int n = 0;
         while (n < quantity) {
             Fabricante fabricante = Fabricante.builder()
                     .nombre(faker.company().name())
                     .build();
-            if(fabricanteRepository.findByNombre(fabricante.getNombre()).isEmpty()) {
+            if (!names.contains(fabricante.getNombre()) &&
+                    fabricanteRepository.findByNombre(fabricante.getNombre()).isEmpty()) {
+                names.add(fabricante.getNombre());
                 list.add(fabricanteRepository.save(fabricante));
                 n++;
             }
         }
-
         return list;
     }
 }
