@@ -23,11 +23,11 @@ public class ClienteService {
       return repository.findAll();
    }
 
-   public Optional<Cliente> get(int id) {
+   public Optional<Cliente> get(long id) {
       return repository.findById(id);
    }
 
-    public Cliente updateCliente(int id, Cliente cliente) {
+    public Cliente updateCliente(long id, Cliente cliente) {
       Cliente uCliente = new Cliente();
       uCliente.setId(id);
       uCliente.setNombre(cliente.getNombre());

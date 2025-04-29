@@ -41,7 +41,7 @@ class AlmacenControllerTest {
       @DisplayName("Almacen Controller Register Almacen")
       void almacenControllerRegisterAlmacen() throws Exception {
             Mockito.when(service.save(Mockito.any(Almacen.class)))
-                        .thenReturn(new Almacen(1, "Almacen 1"));
+                        .thenReturn(new Almacen(1l, "Almacen 1"));
 
             mockMvc.perform(post("/api/almacen")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -65,8 +65,8 @@ class AlmacenControllerTest {
       @DisplayName("Almacen Controller Get All Almacenes")
       void almacenControllerGetAllAlmacenes() throws Exception {
             Mockito.when(service.getAll()).thenReturn(Arrays.asList(
-                        new Almacen(1, "Almacen 1"),
-                        new Almacen(2, "Almacen 2")));
+                        new Almacen(1l, "Almacen 1"),
+                        new Almacen(2l, "Almacen 2")));
             mockMvc.perform(get("/api/almacen")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -76,8 +76,8 @@ class AlmacenControllerTest {
       @Test
       @DisplayName("Almacen Controller Update Almacen")
       void almacenControllerUpdateAlmacen() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(Almacen.class)))
-                        .thenReturn(new Almacen(1, "Almacen 1"));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(Almacen.class)))
+                        .thenReturn(new Almacen(1l, "Almacen 1"));
 
             mockMvc.perform(put("/api/almacen/1")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -100,8 +100,8 @@ class AlmacenControllerTest {
       @Test
       @DisplayName("Almacen Controller Get Almacen By ID")
       void almacenControllerGetAlmacenById() throws Exception {
-            Mockito.when(service.get(Mockito.anyInt()))
-                        .thenReturn(Optional.of(new Almacen(1, "Almacen 1")));
+            Mockito.when(service.get(Mockito.anyLong()))
+                        .thenReturn(Optional.of(new Almacen(1l, "Almacen 1")));
             mockMvc.perform(get("/api/almacen/1")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())

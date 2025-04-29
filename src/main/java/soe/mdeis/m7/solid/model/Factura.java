@@ -10,37 +10,35 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "facturas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Factura {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   String nro;
+   private String nro;
 
-   LocalDateTime fecha;
+   private LocalDateTime fecha;
 
    @Column(nullable = false)
-   String nit;
+   private String nit;
 
    @Column(name = "razon_social", nullable = false)
-   String razonSocial;
+   private String razonSocial;
 
-   BigDecimal total;
+   private BigDecimal total;
 
-   BigDecimal creditoFiscal;
+   private BigDecimal creditoFiscal;
 
    @OneToOne
    @JoinColumn(name = "id_venta")
-   Venta venta;
+   private Venta venta;
 }

@@ -9,35 +9,34 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "clientes")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Cliente {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   String nombre;
+   @Column(name = "nombre_cliente")
+   private String nombre;
 
-   String code;
+   private String code;
 
-   String documento;
+   private String documento;
 
    @Enumerated(EnumType.STRING)
    @Column(name = "tipo_documento")
-   TipoDocumento tipoDocumento;
+   private TipoDocumento tipoDocumento;
 
-   String email;
+   private String email;
 
    @ManyToOne
    @JoinColumn(name = "id_grupo_clientes", nullable = true)
-   GrupoCliente grupoCliente;
+   private GrupoCliente grupoCliente;
 }

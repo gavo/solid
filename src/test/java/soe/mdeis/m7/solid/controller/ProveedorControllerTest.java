@@ -38,9 +38,9 @@ class ProveedorControllerTest {
       @DisplayName("Proveedor Controller get All Proveedores")
       void proveedorControllerGetAllProveedores() throws Exception {
             Mockito.when(service.getAll()).thenReturn(Arrays.asList(
-                        new Proveedor(1, "Proveedor 1"),
-                        new Proveedor(2, "Proveedor 2"),
-                        new Proveedor(3, "Proveedor 3")));
+                        new Proveedor(1l, "Proveedor 1"),
+                        new Proveedor(2l, "Proveedor 2"),
+                        new Proveedor(3l, "Proveedor 3")));
             mockMvc.perform(get("/api/proveedor").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(3)));
@@ -49,7 +49,7 @@ class ProveedorControllerTest {
       @Test
       @DisplayName("Proveedor Controller Register Proveedor")
       void proveedorControllerRegisterProveedor() throws Exception {
-            Mockito.when(service.save(Mockito.any(Proveedor.class))).thenReturn(new Proveedor(1, "Proveedor 1"));
+            Mockito.when(service.save(Mockito.any(Proveedor.class))).thenReturn(new Proveedor(1l, "Proveedor 1"));
             mockMvc.perform(post("/api/proveedor").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Proveedor 1\"}"))
                         .andExpect(status().isCreated())
@@ -67,8 +67,8 @@ class ProveedorControllerTest {
       @Test
       @DisplayName("Proveedor Controller Update Proveedor")
       void proveedorControllerUpdateProveedor() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(Proveedor.class)))
-                        .thenReturn(new Proveedor(1, "Proveedor 1"));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(Proveedor.class)))
+                        .thenReturn(new Proveedor(1l, "Proveedor 1"));
             mockMvc.perform(put("/api/proveedor/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Proveedor 1\"}"))
                         .andExpect(status().isOk())

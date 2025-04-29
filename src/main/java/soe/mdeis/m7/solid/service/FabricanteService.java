@@ -18,7 +18,7 @@ public class FabricanteService {
       return repository.save(fabricante);
    }
 
-   public Fabricante update(int id, Fabricante fabricante) {
+   public Fabricante update(long id, Fabricante fabricante) {
       Fabricante f = new Fabricante(id, fabricante.getNombre());
       return repository.save(f);
    }

@@ -45,26 +45,26 @@ class VentaServiceTest {
       @Test
       @DisplayName("Venta Service Save Venta all discounts without Services")
       void ventaServiceSaveVentaAllDiscountsWithoutServices() throws NoSuchAlgorithmException {
-            GrupoCliente grupoCliente = new GrupoCliente(1, "Grupo Premium", BigDecimal.valueOf(20));
-            Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
+            GrupoCliente grupoCliente = new GrupoCliente(1l, "Grupo Premium", BigDecimal.valueOf(20));
+            Cliente cliente = new Cliente(1l, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         grupoCliente);
             Producto p1 = new Producto(
-                        1, "Galleta", "Cookie", 1,
+                        1l, "Galleta", "Cookie", 1,
                         "111", "lbs", BigDecimal.valueOf(2),
                         null, null, null, null);
             Producto p2 = new Producto(
-                        1, "Galleta Salada", "Cracker", 1,
+                        1l, "Galleta Salada", "Cracker", 1,
                         "111", "lbs", BigDecimal.valueOf(2),
                         null, null, null, null);
 
             var productosVendidos = Arrays.asList(
-                        new ProductoVendido(1, 10, p1.getPrecio(), BigDecimal.valueOf(10), null, p1),
-                        new ProductoVendido(2, 10, p2.getPrecio(), BigDecimal.ZERO, null, p2));
+                        new ProductoVendido(1l, 10, p1.getPrecio(), BigDecimal.valueOf(10), null, p1),
+                        new ProductoVendido(2l, 10, p2.getPrecio(), BigDecimal.ZERO, null, p2));
             Venta venta = new Venta();
 
             venta.setProductos(productosVendidos);
             venta.setCliente(cliente);
-            venta.setFactura(new Factura(1, "null", null, "12345", "Juan Perez", null, null, venta));
+            venta.setFactura(new Factura(1l, "null", null, "12345", "Juan Perez", null, null, venta));
             when(repository.save(any(Venta.class))).thenReturn(venta);
 
             Venta result = service.save(venta);
@@ -82,20 +82,20 @@ class VentaServiceTest {
       @Test
       @DisplayName("Venta Service Save Venta OF Services with Discount but GrupoCLiente")
       void ventaServiceSaveVentaOfServicesWithDiscountButGrupoCliente() throws NoSuchAlgorithmException {
-            Cliente cliente = new Cliente(1, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
+            Cliente cliente = new Cliente(1l, "Juan Perez", "001", "1156321", TipoDocumento.CI, "juanPerez@email.com",
                         null);
 
             Venta venta = new Venta();
-            Servicio servicio = new Servicio(1, "s1", "Atención al cliente", BigDecimal.valueOf(10));
-            Servicio servicio2 = new Servicio(1, "s2", "Soporte Técnico", BigDecimal.valueOf(20));
+            Servicio servicio = new Servicio(1l, "s1", "Atención al cliente", BigDecimal.valueOf(10));
+            Servicio servicio2 = new Servicio(1l, "s2", "Soporte Técnico", BigDecimal.valueOf(20));
             venta.getServicios().add(
-                        new ServicioRealizado(1, servicio.getPrecio(), BigDecimal.ZERO, "ninguna", null, servicio));
+                        new ServicioRealizado(1l, servicio.getPrecio(), BigDecimal.ZERO, "ninguna", null, servicio));
             venta.getServicios().add(
-                        new ServicioRealizado(1, servicio2.getPrecio(), BigDecimal.valueOf(10), "Ninguna", null,
+                        new ServicioRealizado(1l, servicio2.getPrecio(), BigDecimal.valueOf(10), "Ninguna", null,
                                     servicio2));
 
             venta.setCliente(cliente);
-            venta.setFactura(new Factura(1, "null", null, "12345", "Juan Perez", null, null, venta));
+            venta.setFactura(new Factura(1l, "null", null, "12345", "Juan Perez", null, null, venta));
 
             when(repository.save(any(Venta.class))).thenReturn(venta);
 
@@ -116,24 +116,24 @@ class VentaServiceTest {
       void vetaServiceVentaWithoutClientesAndFactura() throws NoSuchAlgorithmException {
             Venta venta = new Venta();
             Producto p1 = new Producto(
-                        1, "Chocolate", "chocolate", 1, "1121",
+                        1l, "Chocolate", "chocolate", 1, "1121",
                         "lbs", BigDecimal.valueOf(2), null,
                         null, null, null);
             Producto p2 = new Producto(
-                        1, "Dulces", "Candy", 1,
+                        1l, "Dulces", "Candy", 1,
                         "3312", "lbs", BigDecimal.valueOf(2),
                         null, null, null, null);
 
             var productosVendidos = Arrays.asList(
-                        new ProductoVendido(1, 10, p1.getPrecio(), BigDecimal.valueOf(10), null, p1),
-                        new ProductoVendido(2, 10, p2.getPrecio(), BigDecimal.ZERO, null, p2));
+                        new ProductoVendido(1l, 10, p1.getPrecio(), BigDecimal.valueOf(10), null, p1),
+                        new ProductoVendido(2l, 10, p2.getPrecio(), BigDecimal.ZERO, null, p2));
 
-            Servicio servicio = new Servicio(1, "s1", "Atención al cliente", BigDecimal.valueOf(10));
-            Servicio servicio2 = new Servicio(1, "s2", "Soporte Técnico", BigDecimal.valueOf(20));
+            Servicio servicio = new Servicio(1l, "s1", "Atención al cliente", BigDecimal.valueOf(10));
+            Servicio servicio2 = new Servicio(1l, "s2", "Soporte Técnico", BigDecimal.valueOf(20));
             venta.getServicios().add(
-                        new ServicioRealizado(1, servicio.getPrecio(), BigDecimal.ZERO, "ninguna", null, servicio));
+                        new ServicioRealizado(1l, servicio.getPrecio(), BigDecimal.ZERO, "ninguna", null, servicio));
             venta.getServicios().add(
-                        new ServicioRealizado(1, servicio2.getPrecio(), BigDecimal.valueOf(10), "Ninguna", null,
+                        new ServicioRealizado(1l, servicio2.getPrecio(), BigDecimal.valueOf(10), "Ninguna", null,
                                     servicio2));
 
             venta.setProductos(productosVendidos);

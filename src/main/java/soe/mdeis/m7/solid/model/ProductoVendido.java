@@ -8,33 +8,31 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "productos_vendidos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class ProductoVendido {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   Integer cantidad;
+   private Integer cantidad;
 
-   BigDecimal precio;
+   private BigDecimal precio;
 
-   BigDecimal descuento = BigDecimal.ZERO;
+   private BigDecimal descuento = BigDecimal.ZERO;
 
    @ManyToOne()
    @JoinColumn(name = "id_venta")
-   Venta venta;
+   private Venta venta;
 
    @ManyToOne(optional = false)
    @JoinColumn(name = "id_producto", nullable = false)
-   Producto producto;
+   private Producto producto;
 }

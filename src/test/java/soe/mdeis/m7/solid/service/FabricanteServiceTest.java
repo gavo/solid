@@ -28,7 +28,7 @@ class FabricanteServiceTest {
    @Test
    @DisplayName("Fabricante Service update Fabricante")
    void fabricanteServiceUpdateFabricante() {
-      Mockito.when(repository.save(Mockito.any(Fabricante.class))).thenReturn(new Fabricante(1, "Fabricante 1"));
+      Mockito.when(repository.save(Mockito.any(Fabricante.class))).thenReturn(new Fabricante(1l, "Fabricante 1"));
       var fabricante = service.update(1, new Fabricante());
       assertEquals(1, fabricante.getId());
       assertEquals("Fabricante 1", fabricante.getNombre());
@@ -37,7 +37,7 @@ class FabricanteServiceTest {
    @Test
    @DisplayName("Fabricante Service save Fabricante")
    void fabricanteServiceSaveFabricante() {
-      Mockito.when(repository.save(Mockito.any(Fabricante.class))).thenReturn(new Fabricante(1, "Fabricante 1"));
+      Mockito.when(repository.save(Mockito.any(Fabricante.class))).thenReturn(new Fabricante(1l, "Fabricante 1"));
       var fabricante = service.save(new Fabricante());
       assertEquals(1, fabricante.getId());
       assertEquals("Fabricante 1", fabricante.getNombre());
@@ -47,9 +47,9 @@ class FabricanteServiceTest {
    @DisplayName("Fabricante Service Get All Fabricantes")
    void fabricanteServiceGetAllFabricantes() {
       Mockito.when(repository.findAll()).thenReturn(Arrays.asList(
-            new Fabricante(1, "Fabricante 1"),
-            new Fabricante(2, "Fabricante 2"),
-            new Fabricante(3, "Fabricante 3")));
+            new Fabricante(1l, "Fabricante 1"),
+            new Fabricante(2l, "Fabricante 2"),
+            new Fabricante(3l, "Fabricante 3")));
 
       var list = service.getAll();
       assertFalse(list.isEmpty());

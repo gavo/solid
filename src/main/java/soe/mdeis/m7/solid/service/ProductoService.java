@@ -22,7 +22,7 @@ public class ProductoService {
       return repository.save(producto);
    }
 
-   public Producto update(int id, Producto producto) {
+   public Producto update(long id, Producto producto) {
       Producto newProducto = new Producto();
       newProducto.setId(id);
       newProducto.setNombre(producto.getNombre());

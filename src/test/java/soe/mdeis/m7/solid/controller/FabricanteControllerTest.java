@@ -37,7 +37,7 @@ class FabricanteControllerTest {
       @DisplayName("Fabricante Controller Register Fabricante")
       void fabricanteControllerRegisterFabricante() throws Exception {
             Mockito.when(service.save(Mockito.any(Fabricante.class)))
-                        .thenReturn(new Fabricante(1, "Fabricante 1"));
+                        .thenReturn(new Fabricante(1l, "Fabricante 1"));
 
             mockMvc.perform(post("/api/fabricante").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Fabricante 1\"}"))
@@ -57,8 +57,8 @@ class FabricanteControllerTest {
       @Test
       @DisplayName("Fabricante Controller update Fabricante")
       void fabricanteControllerUpdateFabricante() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(Fabricante.class)))
-                        .thenReturn(new Fabricante(1, "Fabricante 1"));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(Fabricante.class)))
+                        .thenReturn(new Fabricante(1l, "Fabricante 1"));
             mockMvc.perform(put("/api/fabricante/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Fabricante 1\"}"))
                         .andExpect(status().isOk())
@@ -78,8 +78,8 @@ class FabricanteControllerTest {
       @DisplayName("Fabricante Controller get All Fabricantes")
       void fabricanteControllerGetAllFabricantes() throws Exception {
             Mockito.when(service.getAll()).thenReturn(Arrays.asList(
-                        new Fabricante(1, "Fabricante 1"), new Fabricante(2, "Fabricante 2"),
-                        new Fabricante(3, "Fabricante 3")));
+                        new Fabricante(1l, "Fabricante 1"), new Fabricante(2l, "Fabricante 2"),
+                        new Fabricante(3l, "Fabricante 3")));
             mockMvc.perform(get("/api/fabricante").contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(3)));

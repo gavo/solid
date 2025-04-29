@@ -39,7 +39,7 @@ class ProductoControllerTest {
       @DisplayName("Producto Controller Register Producto")
       void productoControllerRegisterProducto() throws Exception {
             Mockito.when(service.save(Mockito.any(Producto.class))).thenReturn(
-                        new Producto(1, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
+                        new Producto(1l, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
 
             mockMvc.perform(post("/api/producto").contentType(MediaType.APPLICATION_JSON).content(
                         "{\"nombre\":\"Galleta\", \"nombreExtranjero\":\"Cookie\",\"peso\":\"1\",\"codBarra\":\"111\",\"um\":\"lbs\",\"precio\":\"1\"}"))
@@ -108,8 +108,8 @@ class ProductoControllerTest {
       @Test
       @DisplayName("Producto Controller Update Producto")
       void productoControllerUpdateProducto() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(Producto.class))).thenReturn(
-                        new Producto(1, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(Producto.class))).thenReturn(
+                        new Producto(1l, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
 
             mockMvc.perform(put("/api/producto/1").contentType(MediaType.APPLICATION_JSON).content(
                         "{\"nombre\":\"Galleta\", \"nombreExtranjero\":\"Cookie\",\"peso\":\"1\",\"codBarra\":\"111\",\"um\":\"lbs\",\"precio\":\"1\"}"))

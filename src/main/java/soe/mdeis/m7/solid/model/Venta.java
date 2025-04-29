@@ -15,42 +15,40 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "ventas")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Venta {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   LocalDateTime fecha;
+   private LocalDateTime fecha;
 
-   BigDecimal descuento = BigDecimal.ZERO;
+   private BigDecimal descuento = BigDecimal.ZERO;
 
    @Column(name = "sub_total")
-   BigDecimal subTotal;
+   private BigDecimal subTotal;
 
-   BigDecimal total;
+   private BigDecimal total;
 
    @ManyToOne(optional = true)
    @JoinColumn(name = "id_cliente", nullable = true)
-   Cliente cliente;
+   private Cliente cliente;
 
    @OneToOne(mappedBy = "venta", cascade = CascadeType.ALL)
-   Factura factura;
+   private Factura factura;
 
    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-   List<ServicioRealizado> servicios = new ArrayList<>();
+   private List<ServicioRealizado> servicios = new ArrayList<>();
 
    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
-   List<ProductoVendido> productos = new ArrayList<>();
+   private List<ProductoVendido> productos = new ArrayList<>();
 
 }

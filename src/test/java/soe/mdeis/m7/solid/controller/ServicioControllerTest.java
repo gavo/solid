@@ -38,7 +38,7 @@ class ServicioControllerTest {
       @DisplayName("Servicio Controller Register Servicio")
       void servicioControllerRegisterServicio() throws Exception {
             Mockito.when(service.save(Mockito.any(Servicio.class)))
-                        .thenReturn(new Servicio(1, "S-01", "Servicio 1", BigDecimal.ONE));
+                        .thenReturn(new Servicio(1l, "S-01", "Servicio 1", BigDecimal.ONE));
 
             mockMvc.perform(post("/api/servicio")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,9 +72,9 @@ class ServicioControllerTest {
       void showListAllAlmacenes() throws Exception {
             Mockito.when(service.getAll())
                         .thenReturn(Arrays.asList(
-                                    new Servicio(1, "ser-01", "Servicio 1", BigDecimal.ONE),
-                                    new Servicio(1, "ser-02", "Servicio 2", BigDecimal.ONE),
-                                    new Servicio(1, "ser-03", "Servicio 3", BigDecimal.ONE)));
+                                    new Servicio(1l, "ser-01", "Servicio 1", BigDecimal.ONE),
+                                    new Servicio(1l, "ser-02", "Servicio 2", BigDecimal.ONE),
+                                    new Servicio(1l, "ser-03", "Servicio 3", BigDecimal.ONE)));
             mockMvc.perform(get("/api/servicio")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())

@@ -41,11 +41,11 @@ class VentaControllerTest {
    @Test
    @DisplayName("Venta Controller register Venta")
    void ventaControllerRegisterVenta() throws Exception {
-      Producto producto = new Producto(1, "Producto 1", "Product 1", 1, "1234", "lbs", BigDecimal.ONE, null, null, null,
+      Producto producto = new Producto(1l, "Producto 1", "Product 1", 1, "1234", "lbs", BigDecimal.ONE, null, null, null,
             null);
-      var productos = Arrays.asList(new ProductoVendido(1, 5, BigDecimal.valueOf(2), BigDecimal.ZERO, null, producto));
-      Cliente cliente = new Cliente(1, "Juan Perez", "10", "52123", TipoDocumento.CI, "juan@yopmail.com", null);
-      Venta venta = new Venta(1, LocalDateTime.now(), BigDecimal.ZERO, BigDecimal.valueOf(10), BigDecimal.valueOf(10),
+      var productos = Arrays.asList(new ProductoVendido(1l, 5, BigDecimal.valueOf(2), BigDecimal.ZERO, null, producto));
+      Cliente cliente = new Cliente(1l, "Juan Perez", "10", "52123", TipoDocumento.CI, "juan@yopmail.com", null);
+      Venta venta = new Venta(1l, LocalDateTime.now(), BigDecimal.ZERO, BigDecimal.valueOf(10), BigDecimal.valueOf(10),
             cliente, null, null,
             productos);
 
