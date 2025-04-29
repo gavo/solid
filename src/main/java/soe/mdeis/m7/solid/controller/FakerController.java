@@ -15,6 +15,11 @@ public class FakerController {
     @Autowired
     FakeDataService service;
 
+    @GetMapping("/grupo-cliente")
+    public ResponseEntity<List<GrupoCliente>> createFakeGrupoClientes(){
+        return ResponseEntity.ok(service.newFakeGrupoClientes());
+    }
+
     @GetMapping("/servicio/{cantidad}")
     public ResponseEntity<List<Servicio>> createFakeServicios(@PathVariable int cantidad){
         return ResponseEntity.ok(service.newFakeServicios((cantidad)));

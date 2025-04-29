@@ -7,6 +7,7 @@ import soe.mdeis.m7.solid.model.*;
 import soe.mdeis.m7.solid.repository.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Service
@@ -28,6 +29,66 @@ public class FakeDataService {
 
     @Autowired
     ServicioRepository servicioRepository;
+
+    @Autowired
+    GrupoClienteRepository grupoClienteRepository;
+
+    public List<GrupoCliente> newFakeGrupoClientes() {
+        List<GrupoCliente> inDB = grupoClienteRepository.findAll();
+        if (!inDB.isEmpty()) {
+            return inDB;
+        }
+        List<GrupoCliente> list = new ArrayList<>();
+        String[] rangoGrupo = {
+                "",
+                " Minimo",
+                " Menor",
+                " Regular",
+                " Estandar",
+                " Mayor",
+                " Super",
+                " Maximo",
+                " Super Maximo",
+                " Prioritario",
+                " Exclusivo",
+                " Semi Vip",
+                " Vip",
+                " Super Vip",
+                " Especial"
+        };
+        String[] nombresGrupo = {
+                "Minorista",
+                "Cliente",
+                "Institucional",
+                "Usuario",
+                "Local",
+                "Corporativo",
+                "Frecuente",
+                "Emprendedor",
+                "Mayorista",
+                "Distribuidor",
+                "Socio",
+                "Club",
+                "Estrategico",
+                "Suscriptor",
+                "Alianza Estratégica"
+        };
+        double descuento = 0.0001d;
+        for (String pref : nombresGrupo) {
+            for (String suf : rangoGrupo) {
+                GrupoCliente grupoCliente = GrupoCliente.builder()
+                        .nombre(pref + suf)
+                        .descuento(
+                                BigDecimal.valueOf(descuento)
+                                        .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP))
+                        .build();
+                list.add(grupoClienteRepository.save(grupoCliente));
+                descuento = descuento + 0.222;
+            }
+        }
+
+        return list;
+    }
 
     public List<Servicio> newFakeServicios(int quantity) {
         final List<Servicio> list = new ArrayList<>();
