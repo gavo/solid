@@ -33,6 +33,34 @@ public class FakeDataService {
     @Autowired
     GrupoClienteRepository grupoClienteRepository;
 
+    @Autowired
+    ClienteRepository clienteRepository;
+
+    public List<Cliente> newFakeClientes(int quanity) {
+        List<Cliente> list = new ArrayList<>();
+        final HashSet<String> names = new HashSet<>();
+        final HashMap<Long, GrupoCliente> grupoClientes = new HashMap<>();
+        grupoClienteRepository.findAll().forEach(gc -> grupoClientes.put(gc.getId(), gc));
+        int n = 0;
+        while (n < quanity) {
+            Cliente cliente = Cliente.builder()
+                    .code(faker.regexify("[A-Z]{5}-[0-9]{7}"))
+                    .nombre(faker.name().fullName())
+                    .documento(faker.idNumber().valid())
+                    .tipoDocumento(faker.options().option(TipoDocumento.CI, TipoDocumento.NIT))
+                    .email(faker.internet().emailAddress())
+                    .grupoCliente(grupoClientes.get(faker.number().numberBetween(0l, grupoClientes.size() * 3l)))
+                    .build();
+            if(!names.contains(cliente.getNombre())){
+                names.add(cliente.getNombre());
+                list.add(clienteRepository.save(cliente));
+                n++;
+            }
+        }
+
+        return list;
+    }
+
     public List<GrupoCliente> newFakeGrupoClientes() {
         List<GrupoCliente> inDB = grupoClienteRepository.findAll();
         if (!inDB.isEmpty()) {
