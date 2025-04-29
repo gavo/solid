@@ -5,16 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import soe.mdeis.m7.solid.model.Fabricante;
 import soe.mdeis.m7.solid.model.GrupoProducto;
+import soe.mdeis.m7.solid.model.Producto;
 import soe.mdeis.m7.solid.model.Proveedor;
 import soe.mdeis.m7.solid.repository.FabricanteRepository;
 import soe.mdeis.m7.solid.repository.GrupoProductoRepository;
 import soe.mdeis.m7.solid.repository.ProductoRepository;
 import soe.mdeis.m7.solid.repository.ProveedorRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
+import java.math.BigDecimal;
+import java.util.*;
 
 @Service
 public class FakeDataService {
@@ -32,6 +31,48 @@ public class FakeDataService {
 
     @Autowired
     ProductoRepository productoRepository;
+
+    public List<Producto> newFakeProductos(int quatity) {
+        final List<Producto> list = new ArrayList<>();
+        final HashMap<Long, Proveedor> proveedores = new HashMap<>();
+        proveedorRepository.findAll().forEach(p -> proveedores.put(p.getId(), p));
+
+        final HashMap<Long, Fabricante> fabricantes = new HashMap<>();
+        fabricanteRepository.findAll().forEach(f -> fabricantes.put(f.getId(), f));
+
+        final HashMap<Long, GrupoProducto> grupoProductos = new HashMap<>();
+        grupoProductoRepository.findAll().forEach(gp -> grupoProductos.put(gp.getId(), gp));
+
+        final HashMap<Long, Producto> productos = new HashMap<>();
+        productoRepository.findAll().forEach(p -> productos.put(p.getId(), p));
+
+        final HashSet<String> names = new HashSet<>();
+        int n = 0;
+        while (n < quatity) {
+            final String name = faker.commerce().productName();
+            if(!names.contains(name)) {
+                Producto producto = Producto.builder()
+                        .nombre(name)
+                        .nombreExtranjero(name + " " + faker.country().countryCode2())
+                        .peso(faker.number().numberBetween(1, 1000))
+                        .codBarra(faker.number().digits(faker.number().numberBetween(6, 15)))
+                        .um(faker.options().option("kg", "g", "lb", "oz"))
+                        .precio(BigDecimal.valueOf(faker.number().randomDouble(2, 1, 1000)))
+                        .fabricante(fabricantes.get(0L + faker.number().numberBetween(0, fabricantes.size() + 1)))
+                        .proveedor(proveedores.get(0L + faker.number().numberBetween(0, proveedores.size() + 1)))
+                        .grupoProducto(grupoProductos.get(0L + faker.number().numberBetween(0, grupoProductos.size() + 1)))
+                        .alternante(productos.get(0L + faker.number().numberBetween(0, productos.size() * 10)))
+                        .build();
+                names.add(name);
+                Producto saved = productoRepository.save(producto);
+                productos.put(producto.getId(), producto);
+                list.add(producto);
+                n++;
+            }
+
+        }
+        return list;
+    }
 
     public List<Proveedor> newFakesProveedor(int quantity) {
         List<Proveedor> list = new ArrayList<>();

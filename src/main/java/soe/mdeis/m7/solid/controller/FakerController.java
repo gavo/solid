@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import soe.mdeis.m7.solid.model.Fabricante;
 import soe.mdeis.m7.solid.model.GrupoProducto;
+import soe.mdeis.m7.solid.model.Producto;
 import soe.mdeis.m7.solid.model.Proveedor;
 import soe.mdeis.m7.solid.service.FakeDataService;
 
@@ -16,6 +17,11 @@ public class FakerController {
 
     @Autowired
     FakeDataService service;
+
+    @GetMapping("/productos/{cantidad}")
+    public ResponseEntity<List<Producto>> createFakeProductos(@PathVariable int cantidad){
+        return ResponseEntity.ok(service.newFakeProductos((cantidad)));
+    }
 
     @GetMapping("/proveedor/{cantidad}")
     public ResponseEntity<List<Proveedor>> createFakeProveedores(@PathVariable int cantidad){
