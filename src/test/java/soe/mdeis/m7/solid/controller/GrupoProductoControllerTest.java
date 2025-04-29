@@ -38,7 +38,7 @@ class GrupoProductoControllerTest {
       @DisplayName("Grupo Producto Controller Register Grupo Producto")
       void grupoProductoControllerRegisterGrupoProducto() throws Exception {
             Mockito.when(service.save(Mockito.any(GrupoProducto.class)))
-                        .thenReturn(new GrupoProducto(1, "Grupo 1"));
+                        .thenReturn(new GrupoProducto(1l, "Grupo 1"));
             mockMvc.perform(post("/api/grupo-producto").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Grupo 1\"}"))
                         .andExpect(status().isCreated())
@@ -57,8 +57,8 @@ class GrupoProductoControllerTest {
       @Test
       @DisplayName("Grupo Producto Controller Update Grupo Producto")
       void grupoProductoControllerUpdateGrupoProducto() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(GrupoProducto.class)))
-                        .thenReturn(new GrupoProducto(1, "Grupo 1"));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(GrupoProducto.class)))
+                        .thenReturn(new GrupoProducto(1l, "Grupo 1"));
 
             mockMvc.perform(put("/api/grupo-producto/1").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"nombre\":\"Grupo 1\"}"))

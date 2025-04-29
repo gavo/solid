@@ -32,8 +32,8 @@ class ServicioServiceTest {
    @DisplayName("Servicio Service save Servicio")
    void servicioServiceSaveServicio() {
       Mockito.when(service.save(Mockito.any(Servicio.class)))
-            .thenReturn(new Servicio(1, "s-001", "Servicio 1", BigDecimal.TEN));
-      Servicio servicio = new Servicio(0, "s-001", "Servicio 1", BigDecimal.TEN);
+            .thenReturn(new Servicio(1l, "s-001", "Servicio 1", BigDecimal.TEN));
+      Servicio servicio = new Servicio(0l, "s-001", "Servicio 1", BigDecimal.TEN);
       Servicio servicioSaved = service.save(servicio);
       assertNotEquals(servicio.getId(), servicioSaved.getId());
       assertEquals(servicio.getNombre(), servicioSaved.getNombre());

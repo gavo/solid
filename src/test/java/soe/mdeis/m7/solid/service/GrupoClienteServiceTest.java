@@ -31,7 +31,7 @@ class GrupoClienteServiceTest {
    @DisplayName("Grupo Cliente Service save Grupo Cliente")
    void grupoClienteServiceSaveGrupoCliente() {
       Mockito.when(repository.save(Mockito.any(GrupoCliente.class)))
-            .thenReturn(new GrupoCliente(1, "Grupo CLiente 1", BigDecimal.TEN));
+            .thenReturn(new GrupoCliente(1l, "Grupo CLiente 1", BigDecimal.TEN));
       GrupoCliente grupo = service.save(new GrupoCliente());
       assertEquals(1, grupo.getId());
       assertEquals("Grupo CLiente 1", grupo.getNombre());
@@ -41,7 +41,7 @@ class GrupoClienteServiceTest {
    @DisplayName("Grupo Cliente Service Update Grupo Cliente")
    void grupoClienteServiceUpdateGrupoCliente() {
       Mockito.when(repository.save(Mockito.any(GrupoCliente.class)))
-            .thenReturn(new GrupoCliente(1, "Grupo CLiente 1", BigDecimal.TEN));
+            .thenReturn(new GrupoCliente(1l, "Grupo CLiente 1", BigDecimal.TEN));
       GrupoCliente grupo = service.update(1, new GrupoCliente());
       assertEquals(1, grupo.getId());
       assertEquals("Grupo CLiente 1", grupo.getNombre());

@@ -22,7 +22,7 @@ public class GrupoClienteService {
       return repository.findAll();
    }
 
-   public GrupoCliente update(int id, GrupoCliente grupoCliente) {
+   public GrupoCliente update(long id, GrupoCliente grupoCliente) {
       GrupoCliente grupo = new GrupoCliente(id, grupoCliente.getNombre(), grupoCliente.getDescuento());
       return repository.save(grupo);
    }

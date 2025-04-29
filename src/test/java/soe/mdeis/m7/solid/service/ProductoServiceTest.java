@@ -31,9 +31,9 @@ class ProductoServiceTest {
    @DisplayName("Producto Service Update Producto")
    void productoServiceUpdateProducto() {
       Mockito.when(repository.save(Mockito.any(Producto.class)))
-            .thenReturn(new Producto(1, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
-      var producto = service.update(1, new Producto());
-      assertEquals(1, producto.getId());
+            .thenReturn(new Producto(1l, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
+      var producto = service.update(1l, new Producto());
+      assertEquals(1l, producto.getId());
       assertEquals("Galleta", producto.getNombre());
       assertEquals("Cookie", producto.getNombreExtranjero());
    }
@@ -42,9 +42,9 @@ class ProductoServiceTest {
    @DisplayName("Producto Service save Producto")
    void productoServiceSaveProducto() {
       Mockito.when(repository.save(Mockito.any(Producto.class)))
-            .thenReturn(new Producto(1, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
+            .thenReturn(new Producto(1l, "Galleta", "Cookie", 1, "111", "lbs", BigDecimal.ONE, null, null, null, null));
       var producto = service.save(new Producto());
-      assertEquals(1, producto.getId());
+      assertEquals(1l, producto.getId());
       assertEquals("Galleta", producto.getNombre());
       assertEquals("Cookie", producto.getNombreExtranjero());
    }

@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import soe.mdeis.m7.solid.model.GrupoCliente;
 
-public interface GrupoClienteRepository extends JpaRepository<GrupoCliente, Integer> {
+public interface GrupoClienteRepository extends JpaRepository<GrupoCliente, Long> {
 
 }

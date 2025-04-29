@@ -22,7 +22,7 @@ public class GrupoProductoService {
       return this.repository.findAll();
    }
 
-   public GrupoProducto update(int id, GrupoProducto grupoProducto) {
+   public GrupoProducto update(long id, GrupoProducto grupoProducto) {
       GrupoProducto updated = new GrupoProducto(id, grupoProducto.getNombre());
       return this.repository.save(updated);
    }

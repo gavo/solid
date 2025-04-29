@@ -8,33 +8,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 @Entity(name = "servicios_realizados")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class ServicioRealizado {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   BigDecimal precio;
+   @NotNull
+   private BigDecimal precio;
 
-   BigDecimal descuento = BigDecimal.ZERO;
+   private BigDecimal descuento = BigDecimal.ZERO;
 
-   String observaciones;
+   private String observaciones;
 
    @ManyToOne()
    @JoinColumn(name = "id_venta")
-   Venta venta;
+   private Venta venta;
 
    @ManyToOne(optional = false)
    @JoinColumn(name = "id_servicio", nullable = false)
-   Servicio servicio;
+   private Servicio servicio;
 }

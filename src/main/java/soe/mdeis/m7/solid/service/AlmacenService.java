@@ -15,7 +15,7 @@ public class AlmacenService {
    @Autowired
    AlmacenRepository repository;
 
-   public Almacen update(int id, Almacen almacen) {
+   public Almacen update(long id, Almacen almacen) {
       Almacen newAlmacen = new Almacen(id, almacen.getNombre());
       return repository.save(newAlmacen);
    }
@@ -28,11 +28,11 @@ public class AlmacenService {
       return repository.findAll();
    }
 
-   public Optional<Almacen> get(int id) {
+   public Optional<Almacen> get(long id) {
       return repository.findById(id);
    }
 
-   public void delete(int id) {
+   public void delete(long id) {
       repository.deleteById(id);
    }
 

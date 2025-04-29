@@ -40,7 +40,7 @@ public class ProveedorController {
    }
 
    @PutMapping("/proveedor/{id}")
-   public ResponseEntity<Proveedor> updateProveedor(@PathVariable int id,
+   public ResponseEntity<Proveedor> updateProveedor(@PathVariable long id,
          @RequestBody Proveedor proveedor) {
       if (StringUtils.isBlank(proveedor.getNombre())) {
          return ResponseEntity.badRequest().body(proveedor);

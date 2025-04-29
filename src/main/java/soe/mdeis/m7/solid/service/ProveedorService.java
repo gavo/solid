@@ -22,7 +22,7 @@ public class ProveedorService {
       return this.repository.findAll();
    }
 
-   public Proveedor update(int id, Proveedor proveedor) {
+   public Proveedor update(long id, Proveedor proveedor) {
       Proveedor proveedorUpdated = new Proveedor(id, proveedor.getNombre());
       return this.repository.save(proveedorUpdated);
    }

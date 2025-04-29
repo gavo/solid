@@ -30,7 +30,7 @@ class ClienteServiceTest {
    @Test
    @DisplayName("Cliente Service Save Cliente")
    void clienteServiceSaveCliente() {
-      Cliente cliente = new Cliente(1, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
+      Cliente cliente = new Cliente(1l, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
       Mockito.when(repository.save(Mockito.any(Cliente.class))).thenReturn(cliente);
       Cliente newCliente = service.save(new Cliente());
       assertEquals(1, newCliente.getId());
@@ -39,8 +39,8 @@ class ClienteServiceTest {
    @Test
    @DisplayName("Cliente Service Get Cliente")
    void clienteServiceGetCliente() {
-      Cliente cliente = new Cliente(1, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
-      Mockito.when(repository.findById(1)).thenReturn(Optional.of(cliente));
+      Cliente cliente = new Cliente(1l, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
+      Mockito.when(repository.findById(1l)).thenReturn(Optional.of(cliente));
       Optional<Cliente> newCliente = service.get(1);
       assertEquals(1, newCliente.get().getId());
    }
@@ -49,18 +49,18 @@ class ClienteServiceTest {
    @DisplayName("Cliente Service Get All Clientes")
    void clienteServiceGetAllClientes() {
       Mockito.when(repository.findAll()).thenReturn(Arrays.asList(
-            new Cliente(1, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null),
-            new Cliente(2, "Juan Perez2", "1234", "123456", TipoDocumento.CI, "email@email.com", null)));
+            new Cliente(1l, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null),
+            new Cliente(2l, "Juan Perez2", "1234", "123456", TipoDocumento.CI, "email@email.com", null)));
       var clientes = service.getAll();
       assertEquals(2, clientes.size());
-      assertEquals(1, clientes.get(0).getId());
-      assertEquals(2, clientes.get(1).getId());
+      assertEquals(1l, clientes.get(0).getId());
+      assertEquals(2l, clientes.get(1).getId());
    }
 
    @Test
    @DisplayName("Cliente Service Update Cliente")
    void clienteServiceUpdateCliente() {
-      Cliente cliente = new Cliente(1, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
+      Cliente cliente = new Cliente(1l, "Juan Perez", "1234", "123456", TipoDocumento.CI, "email@email.com", null);
       Mockito.when(repository.save(Mockito.any(Cliente.class))).thenReturn(cliente);
       Cliente newCliente = service.updateCliente(1, new Cliente());
       assertEquals(1, newCliente.getId());

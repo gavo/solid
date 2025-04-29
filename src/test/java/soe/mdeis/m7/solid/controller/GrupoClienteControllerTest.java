@@ -38,7 +38,7 @@ class GrupoClienteControllerTest {
       @DisplayName("Grupo Cliente Controller Register GrupoCliente")
       void grupoClienteControllerRegisterGrupoCliente() throws Exception {
             Mockito.when(service.save(Mockito.any(GrupoCliente.class)))
-                        .thenReturn(new GrupoCliente(1, "GrupoC 1", BigDecimal.valueOf(15)));
+                        .thenReturn(new GrupoCliente(1l, "GrupoC 1", BigDecimal.valueOf(15)));
 
             mockMvc.perform(post("/api/grupo-cliente")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,8 +61,8 @@ class GrupoClienteControllerTest {
       @Test
       @DisplayName("Grupo Cliente Controller Update Grupo Cliente")
       void grupoClienteControllerUpdateGrupoCliente() throws Exception {
-            Mockito.when(service.update(Mockito.anyInt(), Mockito.any(GrupoCliente.class)))
-                        .thenReturn(new GrupoCliente(1, "Grupo 1", BigDecimal.TEN));
+            Mockito.when(service.update(Mockito.anyLong(), Mockito.any(GrupoCliente.class)))
+                        .thenReturn(new GrupoCliente(1l, "Grupo 1", BigDecimal.TEN));
             mockMvc.perform(put("/api/grupo-cliente/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"id\":\"1\",\"nombre\":\"Grupo 1\",\"descuento\":\"10\"}"))
@@ -83,8 +83,8 @@ class GrupoClienteControllerTest {
       @DisplayName("Grupo Cliente Controller get All Grupo Clientes")
       void grupoClienteControllerGetAllGrupoClientes() throws Exception {
             Mockito.when(service.getAll()).thenReturn(Arrays.asList(
-                        new GrupoCliente(1, "GrupoC 1", BigDecimal.valueOf(10)),
-                        new GrupoCliente(2, "GrupoC 2", BigDecimal.valueOf(15))));
+                        new GrupoCliente(1l, "GrupoC 1", BigDecimal.valueOf(10)),
+                        new GrupoCliente(2l, "GrupoC 2", BigDecimal.valueOf(15))));
 
             mockMvc.perform(get("/api/grupo-cliente")
                         .contentType(MediaType.APPLICATION_JSON))

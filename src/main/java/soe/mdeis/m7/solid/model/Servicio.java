@@ -2,30 +2,26 @@ package soe.mdeis.m7.solid.model;
 
 import java.math.BigDecimal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity(name = "servicios")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Servicio {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   int id;
+   private Long id;
 
-   String codigo;
+   private String codigo;
 
-   String nombre;
+   @Column(name = "nombre_servicio")
+   private String nombre;
 
-   BigDecimal precio;
+   private BigDecimal precio;
 
 }

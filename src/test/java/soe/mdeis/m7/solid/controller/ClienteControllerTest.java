@@ -40,7 +40,7 @@ class ClienteControllerTest {
       void clienteControllerRegisterCliente() throws Exception {
 
             Mockito.when(service.save(Mockito.any(Cliente.class)))
-                        .thenReturn(new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
+                        .thenReturn(new Cliente(1l, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
                                     null));
 
             mockMvc.perform(post("/api/cliente")
@@ -117,9 +117,9 @@ class ClienteControllerTest {
       @DisplayName("Cliente Controller Get All Clientes")
       void clienteControllerGetAllClientes() throws Exception {
             var clientes = Arrays.asList(
-                        new Cliente(1, "Juan 1", "001", "112235", TipoDocumento.CI, "juan@email.com", null),
-                        new Cliente(2, "Juan 2", "002", "223321", TipoDocumento.NIT, "j2@email.com", null),
-                        new Cliente(3, "Juan3", "003", "11234", TipoDocumento.NIT, "j3@email.com", null));
+                        new Cliente(1l, "Juan 1", "001", "112235", TipoDocumento.CI, "juan@email.com", null),
+                        new Cliente(2l, "Juan 2", "002", "223321", TipoDocumento.NIT, "j2@email.com", null),
+                        new Cliente(3l, "Juan3", "003", "11234", TipoDocumento.NIT, "j3@email.com", null));
 
             Mockito.when(service.getAll()).thenReturn(clientes);
 
@@ -133,7 +133,7 @@ class ClienteControllerTest {
       @DisplayName("Cliente Controller Get Cliente By ID")
       void clienteControllerGetClienteById() throws Exception {
             Mockito.when(service.get(1)).thenReturn(Optional.of(
-                        new Cliente(1, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
+                        new Cliente(1l, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
             mockMvc.perform(get("/api/cliente/1")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
@@ -144,7 +144,7 @@ class ClienteControllerTest {
       @DisplayName("Cliente Controller Get Cliente By Id NotFound")
       void clienteControllerGetClienteByIdNotFound() throws Exception {
             Mockito.when(service.get(1)).thenReturn(Optional.of(
-                        new Cliente(1, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
+                        new Cliente(1l, "Juan Perez", "1234", "12345", TipoDocumento.CI, "", null)));
             mockMvc.perform(get("/api/cliente/2")
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
@@ -153,8 +153,8 @@ class ClienteControllerTest {
       @Test
       @DisplayName("Cliente Controller Update Cliente")
       void clienteUpdateRegisterCliente() throws Exception {
-            Mockito.when(service.updateCliente(Mockito.anyInt(), Mockito.any(Cliente.class)))
-                        .thenReturn(new Cliente(1, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
+            Mockito.when(service.updateCliente(Mockito.anyLong(), Mockito.any(Cliente.class)))
+                        .thenReturn(new Cliente(1l, "Juan Perez", "123", "1234123", TipoDocumento.CI, "jp@email.com",
                                     null));
             mockMvc.perform(put("/api/cliente/1")
                         .contentType(MediaType.APPLICATION_JSON)

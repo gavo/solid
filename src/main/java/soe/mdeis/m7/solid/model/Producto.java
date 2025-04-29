@@ -9,48 +9,48 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity(name = "productos")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Builder
 public class Producto {
 
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
-   Integer id;
+   private Long id;
 
-   String nombre;
+   @Column(name = "nombre_producto")
+   private String nombre;
 
-   @Column(name = "nombre_extranjero")
-   String nombreExtranjero;
+   @Column(name = "nombre_producto_extranjero")
+   private String nombreExtranjero;
 
-   int peso;
+   private int peso;
 
    @Column(name = "cod_barra")
-   String codBarra;
+   private String codBarra;
 
-   String um;
+   private String um;
 
-   BigDecimal precio = BigDecimal.ZERO;
+   private BigDecimal precio = BigDecimal.ZERO;
 
    @ManyToOne
    @JoinColumn(name = "id_grupo_producto")
-   GrupoProducto grupoProducto;
+   private GrupoProducto grupoProducto;
 
    @ManyToOne()
    @JoinColumn(name = "id_proveedor")
-   Proveedor proveedor;
+   private Proveedor proveedor;
 
    @ManyToOne()
    @JoinColumn(name = "id_fabricante")
-   Fabricante fabricante;
+   private Fabricante fabricante;
 
    @ManyToOne()
-   Producto alternante;
+   @JoinColumn(name = "id_producto")
+   private Producto alternante;
 }

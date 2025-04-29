@@ -29,7 +29,7 @@ class GrupoProductoServiceTest {
    @DisplayName("Grupo Producto Service update Grupo Producto")
    void grupoProductoServiceUpdateGrupoProducto() {
       Mockito.when(repository.save(Mockito.any(GrupoProducto.class)))
-            .thenReturn(new GrupoProducto(1, "Grupo 1"));
+            .thenReturn(new GrupoProducto(1l, "Grupo 1"));
       var grupo = service.update(1, new GrupoProducto());
       assertEquals(1, grupo.getId());
       assertEquals("Grupo 1", grupo.getNombre());
@@ -39,10 +39,10 @@ class GrupoProductoServiceTest {
    @DisplayName("Grupo Producto Service save Grupo Producto")
    void grupoProductoServiceSaveGrupoProducto() {
       Mockito.when(repository.save(Mockito.any(GrupoProducto.class)))
-            .thenReturn(new GrupoProducto(1, "Grupo 1"));
+            .thenReturn(new GrupoProducto(1l, "Grupo 1"));
 
       var grupo = service.save(new GrupoProducto());
-      assertEquals(1, grupo.getId());
+      assertEquals(1l, grupo.getId());
       assertEquals("Grupo 1", grupo.getNombre());
    }
 
