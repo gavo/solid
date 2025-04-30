@@ -248,6 +248,12 @@ public class FakeDataService {
     }
 
     public List<Venta> newFakeVentas(int cantidad) {
+        final HashMap<Long, Producto> products = new HashMap<>();
+        final HashMap<Long, Servicio> servicios = new HashMap<>();
+        final HashMap<Long, Cliente> clientes = new HashMap<>();
+        productoRepository.findAll().forEach(producto -> products.put(producto.getId(), producto));
+        servicioRepository.findAll().forEach(servicio->servicios.put(servicio.getId(), servicio));
+        clienteRepository.findAll().forEach(cliente -> clientes.put(cliente.getId(), cliente));
         List<Venta> list = new ArrayList<>();
         List<Venta> auxList = ventaRepository.findAll();
         Venta aux = auxList.isEmpty() ? null : auxList.getLast();
@@ -260,7 +266,7 @@ public class FakeDataService {
             List<ServicioRealizado> serviceList = new ArrayList<>();
             int cantP = faker.number().numberBetween(0, 10);
             for (int i = 0; i < cantP; i++) {
-                Producto producto = productoRepository.getReferenceById(faker.number().numberBetween(1, productoRepository.count()));
+                Producto producto = products.get(faker.number().numberBetween(1l, products.size()));
                 ProductoVendido productoVendido = ProductoVendido.builder()
                         .producto(producto)
                         .venta(venta)
@@ -272,7 +278,7 @@ public class FakeDataService {
             }
             int cantS = faker.number().numberBetween(0, 5);
             for (int i = 0; i < cantS; i++) {
-                Servicio servicio = servicioRepository.getReferenceById(faker.number().numberBetween(1, servicioRepository.count()));
+                Servicio servicio = servicios.get(faker.number().numberBetween(1l, servicios.size()));
                 ServicioRealizado servicioRealizado = ServicioRealizado.builder()
                         .servicio(servicio)
                         .venta(venta)
@@ -284,7 +290,7 @@ public class FakeDataService {
             venta.setFecha(fecha);
             venta.setProductos(productList);
             venta.setServicios(serviceList);
-            venta.setCliente(clienteRepository.getReferenceById(faker.number().numberBetween(1, clienteRepository.count())));
+            venta.setCliente(clientes.get(faker.number().numberBetween(1l, clientes.size())));
             if (faker.number().numberBetween(0, 10) % 2 == 0) {
                 Factura factura = Factura.builder()
                         .nit(venta.getCliente().getDocumento())

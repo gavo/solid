@@ -2,6 +2,7 @@ package soe.mdeis.m7.solid.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,6 +33,7 @@ public class ProductoVendido {
 
    @ManyToOne()
    @JoinColumn(name = "id_venta")
+   @JsonIgnore
    private Venta venta;
 
    @ManyToOne(optional = false)

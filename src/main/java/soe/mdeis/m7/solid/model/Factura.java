@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,11 +41,12 @@ public class Factura {
 
     private BigDecimal total;
 
-    @Column(name = "credito-fiscal")
+    @Column(name = "credito_fiscal")
     private BigDecimal creditoFiscal;
 
     @OneToOne
     @JoinColumn(name = "id_venta")
+    @JsonIgnore
     private Venta venta;
 
     @Override
